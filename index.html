@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Pedidos - Velas Navideñas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5530;
+            --secondary: #d4af37;
+            --accent: #8b4513;
+            --light: #f5f5dc;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --text: #333333;
+            --background: #f9f9f9;
+            --info: #2196f3;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), #1e3a23);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(212,175,55,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            position: relative;
+            font-weight: 300;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--secondary);
+            position: relative;
+        }
+        
+        .card-title::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            background-color: white;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .checkbox-group label {
+            margin-bottom: 0;
+        }
+        
+        .btn {
+            background-color: var(--secondary);
+            color: var(--primary);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #c19b2a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #43a047;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #f57c00;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #e53935;
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #1976d2;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .btn-sm {
+            padding: 10px;
+            font-size: 0.9rem;
+            min-width: 40px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 0 15px;
+            min-width: 300px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        /* Navegación */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tab:hover {
+            background: #f5f5f5;
+            color: var(--accent);
+        }
+        
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Historial de pedidos */
+        .order-history {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .order-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-customer {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+        
+        .order-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .order-content {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .candle-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+            flex-shrink: 0;
+        }
+        
+        .modal-candle-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--secondary);
+            margin: 0 auto 15px;
+            display: block;
+        }
+        
+        .order-details {
+            flex: 1;
+        }
+        
+        .order-detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .order-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            gap: 8px;
+        }
+        
+        .order-actions .btn {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .no-orders {
+            text-align: center;
+            padding: 40px;
+            color: #7f8c8d;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        /* Tabla de precios unificada */
+        .unified-price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .unified-price-table th, .unified-price-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .unified-price-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .unified-price-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .price-section {
+            background-color: rgba(44, 85, 48, 0.1);
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary);
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .personalization-list {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .personalization-item {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 6px 10px;
+            border-radius: 4px;
+            border-left: 2px solid var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        .wood-message {
+            background-color: rgba(139, 69, 19, 0.1);
+            padding: 8px 12px;
+            margin-top: 8px;
+            border-radius: 4px;
+            border-left: 2px solid var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        /* Vista móvil */
+        @media (max-width: 768px) {
+            .col {
+                flex: 100%;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .orders-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .order-date {
+                margin-top: 5px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .order-content {
+                flex-direction: column;
+            }
+            
+            .candle-image {
+                width: 100%;
+                height: 150px;
+                margin-bottom: 10px;
+            }
+            
+            .order-actions {
+                flex-direction: row;
+                gap: 5px;
+            }
+            
+            .order-actions .btn {
+                flex: 1;
+                padding: 10px;
+                min-width: auto;
+            }
+            
+            .btn-text {
+                display: none;
+            }
+        }
+        
+        /* Vista desktop */
+        @media (min-width: 769px) {
+            .btn-text {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gestor de Pedidos</h1>
+            <p class="subtitle">Velas Navideñas Personalizadas</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-tab="order">Información del Pedido</div>
+            <div class="nav-tab" data-tab="prices">Precios de Referencia</div>
+            <div class="nav-tab" data-tab="summary">Historial de Pedidos</div>
+        </div>
+        
+        <!-- Pestaña Información del Pedido -->
+        <div id="order-tab" class="tab-content active">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <h2 class="card-title">Información del Pedido</h2>
+                        
+                        <div class="form-group">
+                            <label for="packaging">Tipo de Empaque:</label>
+                            <select id="packaging">
+                                <option value="">Seleccione un empaque</option>
+                                <option value="caja">Caja</option>
+                                <option value="bolsa">Bolsa</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="candleType">Tipo de Vela:</label>
+                            <select id="candleType">
+                                <option value="">Seleccione un tipo de vela</option>
+                                <option value="blancas">Blancas</option>
+                                <option value="mirellas">Mirellas</option>
+                                <option value="pesebre">Pesebre</option>
+                                <option value="colores">Colores</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="woodBase">
+                                <label for="woodBase">Añadir Base en Madera (+$12.000)</label>
+                            </div>
+                        </div>
+                        
+                        <div id="woodBaseMessageGroup" class="form-group hidden">
+                            <label for="woodBaseMessage">Mensaje para personalizar la base en madera:</label>
+                            <textarea id="woodBaseMessage" rows="3" placeholder="Escribe el mensaje para personalizar la base..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customerName">Nombre de quien realiza el pedido:</label>
+                            <input type="text" id="customerName" placeholder="Ingrese su nombre completo">
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title">Personalización de Velas</h2>
+                        <p>Ingrese hasta 10 nombres o palabras para personalizar las velas (una por línea):</p>
+                        <div class="form-group">
+                            <textarea id="candlePersonalization" rows="10" placeholder="Escriba cada nombre o palabra en una línea diferente..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <button id="confirmOrderBtn" class="btn btn-success btn-block">
+                        <i class="fas fa-check"></i>
+                        <span>Confirmar Pedido</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pestaña Precios de Referencia -->
+        <div id="prices-tab" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Precios de Referencia</h2>
+                
+                <table class="unified-price-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="price-section">
+                            <td colspan="2">Caja</td>
+                        </tr>
+                        <tr>
+                            <td>Blancas</td>
+                            <td class="price">$20.000</td>
+                        </tr>
+                        <tr>
+                            <td>Mirellas</td>
+                            <td class="price">$22.000</td>
+                        </tr>
+                        <tr>
+                            <td>Pesebre</td>
+                            <td class="price">$20.000</td>
+                        </tr>
+                        <tr>
+                            <td>Colores</td>
+                            <td class="price">$23.000</td>
+                        </tr>
+                        
+                        <tr class="price-section">
+                            <td colspan="2">Bolsa</td>
+                        </tr>
+                        <tr>
+                            <td>Blancas</td>
+                            <td class="price">$18.000</td>
+                        </tr>
+                        <tr>
+                            <td>Mirellas</td>
+                            <td class="price">$20.000</td>
+                        </tr>
+                        <tr>
+                            <td>Pesebre</td>
+                            <td class="price">$18.000</td>
+                        </tr>
+                        <tr>
+                            <td>Colores</td>
+                            <td class="price">$22.000</td>
+                        </tr>
+                        
+                        <tr class="price-section">
+                            <td colspan="2">Accesorios</td>
+                        </tr>
+                        <tr>
+                            <td>Base en Madera</td>
+                            <td class="price">$12.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pestaña Historial de Pedidos -->
+        <div id="summary-tab" class="tab-content">
+            <div class="card">
+                <h2 class="card-title">Historial de Pedidos</h2>
+                
+                <div class="search-container">
+                    <input type="text" id="searchOrders" placeholder="Buscar pedidos por nombre de cliente..." class="form-group">
+                </div>
+                
+                <div id="orderHistory" class="order-history">
+                    <div class="orders-grid">
+                        <div class="no-orders">No hay pedidos registrados aún</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal para detalles del pedido -->
+        <div id="orderDetailsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Detalles del Pedido</h3>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div id="modalBody">
+                    <!-- Contenido dinámico -->
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Gestor de Pedidos - Velas Navideñas | Todos los derechos reservados</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Precios de referencia
+            const prices = {
+                caja: {
+                    blancas: 20000,
+                    mirellas: 22000,
+                    pesebre: 20000,
+                    colores: 23000
+                },
+                bolsa: {
+                    blancas: 18000,
+                    mirellas: 20000,
+                    pesebre: 18000,
+                    colores: 22000
+                },
+                woodBase: 12000
+            };
+            
+            // Mapeo de imágenes para cada tipo de vela
+            const candleImages = {
+                blancas: 'images/Blancas.jpeg',
+                mirellas: 'images/Mirellas.jpeg',
+                pesebre: 'images/Pesebre.jpeg',
+                colores: 'images/Colores.jpeg'
+            };
+            
+            // Elementos del DOM
+            const packagingSelect = document.getElementById('packaging');
+            const candleTypeSelect = document.getElementById('candleType');
+            const woodBaseCheckbox = document.getElementById('woodBase');
+            const woodBaseMessageGroup = document.getElementById('woodBaseMessageGroup');
+            const woodBaseMessage = document.getElementById('woodBaseMessage');
+            const customerNameInput = document.getElementById('customerName');
+            const candlePersonalization = document.getElementById('candlePersonalization');
+            const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+            const orderHistory = document.getElementById('orderHistory');
+            const searchOrders = document.getElementById('searchOrders');
+            const orderDetailsModal = document.getElementById('orderDetailsModal');
+            const modalBody = document.getElementById('modalBody');
+            const closeModal = document.querySelector('.close-modal');
+            
+            // Variables globales
+            let editingOrderId = null;
+            
+            // Navegación entre pestañas
+            const navTabs = document.querySelectorAll('.nav-tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Actualizar pestañas activas
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar contenido correspondiente
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Si es la pestaña de resumen, cargar el historial
+                    if (tabId === 'summary') {
+                        loadOrderHistory();
+                    }
+                });
+            });
+            
+            // Mostrar/ocultar campo de mensaje para base de madera
+            woodBaseCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    woodBaseMessageGroup.classList.remove('hidden');
+                } else {
+                    woodBaseMessageGroup.classList.add('hidden');
+                }
+            });
+            
+            // Confirmar pedido
+            confirmOrderBtn.addEventListener('click', function() {
+                const packaging = packagingSelect.value;
+                const candleType = candleTypeSelect.value;
+                const hasWoodBase = woodBaseCheckbox.checked;
+                const woodMessage = woodBaseMessage.value;
+                const customerName = customerNameInput.value;
+                const personalizations = candlePersonalization.value.split('\n').filter(p => p.trim() !== '');
+                
+                // Validaciones
+                if (!packaging || !candleType) {
+                    alert('Por favor, seleccione el tipo de empaque y tipo de vela.');
+                    return;
+                }
+                
+                if (!customerName) {
+                    alert('Por favor, ingrese su nombre.');
+                    return;
+                }
+                
+                // Calcular total
+                let total = prices[packaging][candleType];
+                let woodBaseCost = 0;
+                
+                if (hasWoodBase) {
+                    woodBaseCost = prices.woodBase;
+                    total += woodBaseCost;
+                }
+                
+                // Crear objeto de pedido
+                const order = {
+                    id: editingOrderId || Date.now(),
+                    customerName,
+                    packaging,
+                    candleType,
+                    hasWoodBase,
+                    woodMessage,
+                    personalizations,
+                    total,
+                    date: new Date().toLocaleString('es-ES')
+                };
+                
+                // Guardar en localStorage
+                saveOrder(order);
+                
+                alert(`¡Pedido ${editingOrderId ? 'actualizado' : 'confirmado'} con éxito!`);
+                
+                // Limpiar formulario
+                resetForm();
+                
+                // Si estábamos editando, volver al historial
+                if (editingOrderId) {
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    document.querySelector('.nav-tab[data-tab="summary"]').classList.add('active');
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById('summary-tab').classList.add('active');
+                    
+                    // Cargar historial
+                    loadOrderHistory();
+                }
+            });
+            
+            // Buscar pedidos
+            searchOrders.addEventListener('input', function() {
+                loadOrderHistory(this.value);
+            });
+            
+            // Cerrar modal
+            closeModal.addEventListener('click', function() {
+                orderDetailsModal.style.display = 'none';
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            window.addEventListener('click', function(event) {
+                if (event.target === orderDetailsModal) {
+                    orderDetailsModal.style.display = 'none';
+                }
+            });
+            
+            // Funciones auxiliares
+            function getCandleTypeName(type) {
+                const names = {
+                    blancas: 'Blancas',
+                    mirellas: 'Mirellas',
+                    pesebre: 'Pesebre',
+                    colores: 'Colores'
+                };
+                return names[type];
+            }
+            
+            function formatPrice(price) {
+                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+            
+            function saveOrder(order) {
+                let orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
+                
+                if (editingOrderId) {
+                    // Actualizar pedido existente
+                    const index = orders.findIndex(o => o.id === editingOrderId);
+                    if (index !== -1) {
+                        orders[index] = order;
+                    }
+                    editingOrderId = null;
+                } else {
+                    // Agregar nuevo pedido
+                    orders.push(order);
+                }
+                
+                localStorage.setItem('candleOrders', JSON.stringify(orders));
+            }
+            
+            function loadOrderHistory(searchTerm = '') {
+                const orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
+                const ordersGrid = orderHistory.querySelector('.orders-grid');
+                
+                // Filtrar pedidos si hay término de búsqueda
+                const filteredOrders = searchTerm 
+                    ? orders.filter(order => 
+                          order.customerName.toLowerCase().includes(searchTerm.toLowerCase()))
+                    : orders;
+                
+                if (filteredOrders.length === 0) {
+                    ordersGrid.innerHTML = '<div class="no-orders">No hay pedidos registrados</div>';
+                    return;
+                }
+                
+                let historyHTML = '';
+                
+                // Ordenar pedidos por fecha (más reciente primero)
+                filteredOrders.sort((a, b) => b.id - a.id);
+                
+                filteredOrders.forEach(order => {
+                    const candleImage = candleImages[order.candleType] || 'images/default.jpeg';
+                    
+                    historyHTML += `
+                        <div class="order-card" data-order-id="${order.id}">
+                            <div class="order-header">
+                                <div class="order-customer">${order.customerName}</div>
+                                <div class="order-date">${order.date}</div>
+                            </div>
+                            <div class="order-content">
+                                <img src="${candleImage}" alt="${getCandleTypeName(order.candleType)}" class="candle-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI2Y1ZjVmNSIvPgo8cGF0aCBkPSJNMzUgMzVIMzBWNDBIMzVWNDVINDBWNDBIMzVWMzVaTTQ1IDM1SDQwVjQwSDQ1VjQ1SDUwVjQwSDQ1VjM1Wk0zNSA1MEg0MFY1NUgzNVY1MFpNNDUgNTBINTAvNTVDNDUgNTBaTTMwIDUwSDM1VjU1SDMwVjUwWiIgZmlsbD0iI2RkZCIvPgo8L3N2Zz4K'">
+                                <div class="order-details">
+                                    <div class="order-detail-item">
+                                        <span>Empaque:</span>
+                                        <span>${order.packaging === 'caja' ? 'Caja' : 'Bolsa'}</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <span>Tipo de vela:</span>
+                                        <span>${getCandleTypeName(order.candleType)}</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <span>Base en madera:</span>
+                                        <span>${order.hasWoodBase ? 'Sí' : 'No'}</span>
+                                    </div>
+                                    <div class="order-detail-item">
+                                        <span>Total:</span>
+                                        <span class="price">$${formatPrice(order.total)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-actions">
+                                <button class="btn btn-sm btn-info view-details">
+                                    <i class="fas fa-eye"></i>
+                                    <span class="btn-text">Ver Detalles</span>
+                                </button>
+                                <button class="btn btn-sm btn-warning edit-order">
+                                    <i class="fas fa-edit"></i>
+                                    <span class="btn-text">Editar</span>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-order">
+                                    <i class="fas fa-trash"></i>
+                                    <span class="btn-text">Eliminar</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                ordersGrid.innerHTML = historyHTML;
+                
+                // Agregar event listeners a los botones
+                document.querySelectorAll('.view-details').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const orderId = this.closest('.order-card').getAttribute('data-order-id');
+                        showOrderDetails(orderId);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-order').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const orderId = parseInt(this.closest('.order-card').getAttribute('data-order-id'));
+                        editOrder(orderId);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-order').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const orderId = parseInt(this.closest('.order-card').getAttribute('data-order-id'));
+                        deleteOrder(orderId);
+                    });
+                });
+            }
+            
+            function showOrderDetails(orderId) {
+                const orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
+                const order = orders.find(o => o.id === parseInt(orderId));
+                
+                if (!order) return;
+                
+                const candleImage = candleImages[order.candleType] || 'images/default.jpeg';
+                
+                let detailsHTML = `
+                    <img src="${candleImage}" alt="${getCandleTypeName(order.candleType)}" class="modal-candle-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI2Y1ZjVmNSIvPgo8cGF0aCBkPSJNNTAgNTBINDVWNTVINTBWNjBINTVWNTVINTBWNTVaTTY1IDUwSDYwVjU1SDY1VjYwSDcwVjU1SDY1VjUwWk01MCA3NUg1NVY4MEg1MFY3NVpNNjUgNzVINzBWODBINjVWNzVaTTQ1IDc1SDUwVjgwSDQ1Vjc1WiIgZmlsbD0iI2RkZCIvPgo8L3N2Zz4K'">
+                    <div class="order-details">
+                        <div class="order-detail-item">
+                            <span>Cliente:</span>
+                            <span>${order.customerName}</span>
+                        </div>
+                        <div class="order-detail-item">
+                            <span>Fecha:</span>
+                            <span>${order.date}</span>
+                        </div>
+                        <div class="order-detail-item">
+                            <span>Empaque:</span>
+                            <span>${order.packaging === 'caja' ? 'Caja' : 'Bolsa'}</span>
+                        </div>
+                        <div class="order-detail-item">
+                            <span>Tipo de vela:</span>
+                            <span>${getCandleTypeName(order.candleType)}</span>
+                        </div>
+                        <div class="order-detail-item">
+                            <span>Base en madera:</span>
+                            <span>${order.hasWoodBase ? 'Sí' : 'No'}</span>
+                        </div>
+                `;
+                
+                if (order.hasWoodBase && order.woodMessage) {
+                    detailsHTML += `
+                        <div class="order-detail-item">
+                            <span>Mensaje base:</span>
+                        </div>
+                        <div class="wood-message">
+                            "${order.woodMessage}"
+                        </div>
+                    `;
+                }
+                
+                if (order.personalizations.length > 0) {
+                    detailsHTML += `
+                        <div class="order-detail-item">
+                            <span>Personalizaciones:</span>
+                        </div>
+                        <div class="personalization-list">
+                    `;
+                    
+                    order.personalizations.forEach(p => {
+                        detailsHTML += `
+                            <div class="personalization-item">${p}</div>
+                        `;
+                    });
+                    
+                    detailsHTML += `</div>`;
+                }
+                
+                detailsHTML += `
+                        <div class="order-detail-item">
+                            <span>Total:</span>
+                            <span class="price">$${formatPrice(order.total)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                modalBody.innerHTML = detailsHTML;
+                orderDetailsModal.style.display = 'flex';
+            }
+            
+            function editOrder(orderId) {
+                const orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
+                const order = orders.find(o => o.id === orderId);
+                
+                if (!order) return;
+                
+                // Llenar el formulario con los datos del pedido
+                packagingSelect.value = order.packaging;
+                candleTypeSelect.value = order.candleType;
+                woodBaseCheckbox.checked = order.hasWoodBase;
+                
+                if (order.hasWoodBase) {
+                    woodBaseMessageGroup.classList.remove('hidden');
+                    woodBaseMessage.value = order.woodMessage || '';
+                } else {
+                    woodBaseMessageGroup.classList.add('hidden');
+                }
+                
+                customerNameInput.value = order.customerName;
+                candlePersonalization.value = order.personalizations.join('\n');
+                
+                // Cambiar texto del botón
+                confirmOrderBtn.innerHTML = '<i class="fas fa-sync-alt"></i><span>Actualizar Pedido</span>';
+                
+                // Guardar ID para actualización
+                editingOrderId = orderId;
+                
+                // Ir a la pestaña de pedidos
+                navTabs.forEach(t => t.classList.remove('active'));
+                document.querySelector('.nav-tab[data-tab="order"]').classList.add('active');
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById('order-tab').classList.add('active');
+            }
+            
+            function deleteOrder(orderId) {
+                if (confirm('¿Está seguro de que desea eliminar este pedido?')) {
+                    let orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
+                    orders = orders.filter(o => o.id !== orderId);
+                    localStorage.setItem('candleOrders', JSON.stringify(orders));
+                    loadOrderHistory();
+                }
+            }
+            
+            function resetForm() {
+                packagingSelect.value = '';
+                candleTypeSelect.value = '';
+                woodBaseCheckbox.checked = false;
+                woodBaseMessageGroup.classList.add('hidden');
+                woodBaseMessage.value = '';
+                customerNameInput.value = '';
+                candlePersonalization.value = '';
+                confirmOrderBtn.innerHTML = '<i class="fas fa-check"></i><span>Confirmar Pedido</span>';
+                editingOrderId = null;
+            }
+            
+            // Cargar historial al iniciar si estamos en la pestaña de resumen
+            if (document.querySelector('.nav-tab[data-tab="summary"]').classList.contains('active')) {
+                loadOrderHistory();
+            }
+        });
+    </script>
+</body>
+</html>
