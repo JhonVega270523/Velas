@@ -732,6 +732,40 @@
             header {
                 padding: 15px 0;
             }
+            /* Mobile tweaks requested: center specific card titles and ensure inputs show readable text */
+            #prices-tab .card-title,
+            #history-tab .card-title {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                margin: 0 auto 8px auto;
+                width: 100%;
+            }
+
+            /* Ensure date inputs and other form controls show readable text on mobile */
+            input[type="date"],
+            input[type="text"],
+            input[type="tel"],
+            input[type="number"],
+            select,
+            textarea {
+                color: #222;
+                -webkit-text-fill-color: #222; /* iOS/Safari */
+                box-sizing: border-box;
+            }
+
+            /* Prevent horizontal scrolling in the order tab */
+            #order-tab {
+                overflow-x: hidden;
+            }
+            #order-tab .card,
+            #order-tab .products-section,
+            #order-tab .wood-bases-section {
+                overflow-x: hidden;
+                max-width: 100%;
+            }
+            .product-item { min-width: 0; }
         }
         /* Toaster notifications */
         #toastContainer {
@@ -1145,7 +1179,7 @@
             }
 
             // Funciones de notificaciones (toasts) y confirmación
-            window.showToast = function(message, type = 'info', duration = 3500) {
+            window.showToast = function(message, type = 'info', duration = 2200) {
                 const container = document.getElementById('toastContainer');
                 if (!container) return alert(message);
                 const toast = document.createElement('div');
@@ -1267,11 +1301,11 @@
                 try {
                     if (editingOrderId) {
                         updateOrderLocal(order);
-                        alert('Pedido actualizado correctamente.');
+                        showToast('Pedido actualizado correctamente.', 'success', 2200);
                     } else {
                         saveOrderToLocal(order);
                         const formattedDate = new Date(deliveryDate).toLocaleDateString('es-ES');
-                        showToast(`<strong>¡Pedido confirmado con éxito!</strong><br>Cliente: ${customerName}<br>Teléfono: ${customerPhone || 'No proporcionado'}<br>Fecha de entrega: ${formattedDate}<br>Total: $${calculateTotal().toLocaleString()}<br><small>Los datos han sido guardados en el Historial de Pedidos.</small>`, 'success', 6000);
+                        showToast(`<strong>¡Pedido confirmado con éxito!</strong><br>Cliente: ${customerName}<br>Teléfono: ${customerPhone || 'No proporcionado'}<br>Fecha de entrega: ${formattedDate}<br>Total: $${calculateTotal().toLocaleString()}<br><small>Los datos han sido guardados en el Historial de Pedidos.</small>`, 'success', 3000);
                     }
 
                     // Limpiar formulario y resetear modo edición
