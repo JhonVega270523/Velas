@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Pedidos - Detalles Laurel Medellín</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #2c5530;
@@ -895,6 +896,48 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.18);
         }
 
+        /* Totales del historial */
+        .history-totals {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .total-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .total-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .total-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Botones de exportación/importación */
+        .excel-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .excel-buttons .btn {
+            flex: 1;
+        }
+
+        /* Input de archivo oculto */
+        #fileInput {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -1121,6 +1164,19 @@
         <div id="history-tab" class="tab-content">
             <div class="card">
                 <h2 class="card-title">Historial de Pedidos</h2>
+                
+                <div class="excel-buttons">
+                    <button id="exportExcelBtn" class="btn btn-success">
+                        <i class="fas fa-file-excel"></i>
+                        Exportar a Excel
+                    </button>
+                    <button id="importExcelBtn" class="btn btn-info">
+                        <i class="fas fa-file-import"></i>
+                        Importar desde Excel
+                    </button>
+                    <input type="file" id="fileInput" accept=".xlsx, .xls">
+                </div>
+                
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px;">
                     <div style="color:#666; font-size:0.95rem;">Pedidos guardados localmente en su navegador.</div>
                 </div>
@@ -1151,6 +1207,22 @@
                     </table>
                 </div>
                 <div id="paginationControls" style="margin-top:10px;display:flex;gap:8px;align-items:center;justify-content:center;"></div>
+                
+                <!-- Totales del historial -->
+                <div id="historyTotals" class="history-totals">
+                    <div class="total-item">
+                        <div class="total-value" id="totalCajas">0</div>
+                        <div class="total-label">Total Cajas</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-value" id="totalBolsas">0</div>
+                        <div class="total-label">Total Bolsas</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-value" id="totalDinero">$0</div>
+                        <div class="total-label">Total en Dinero</div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -1202,6 +1274,12 @@
             const woodBaseMessageInput = document.getElementById('woodBaseMessage');
             const orderSummaryDiv = document.getElementById('orderSummary');
             const lineCounter = document.getElementById('lineCounter');
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            const importExcelBtn = document.getElementById('importExcelBtn');
+            const fileInput = document.getElementById('fileInput');
+            const totalCajasEl = document.getElementById('totalCajas');
+            const totalBolsasEl = document.getElementById('totalBolsas');
+            const totalDineroEl = document.getElementById('totalDinero');
             
             let productCount = 0;
             let editingOrderId = null;
@@ -1351,6 +1429,182 @@
                 currentPage = 1;
                 renderOrderHistory();
             });
+            
+            // Exportar a Excel
+            if (exportExcelBtn) {
+                exportExcelBtn.addEventListener('click', function() {
+                    exportToExcel();
+                });
+            }
+            
+            // Importar desde Excel
+            if (importExcelBtn) {
+                importExcelBtn.addEventListener('click', function() {
+                    fileInput.click();
+                });
+            }
+            
+            // Manejar selección de archivo
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        importFromExcel(file);
+                    }
+                    // Resetear el input para permitir seleccionar el mismo archivo otra vez
+                    fileInput.value = '';
+                });
+            }
+            
+            // Función para exportar a Excel
+            function exportToExcel() {
+                try {
+                    const orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                    if (!orders || orders.length === 0) {
+                        showToast('No hay datos para exportar.', 'warning');
+                        return;
+                    }
+                    
+                    // Preparar datos para Excel
+                    const data = [];
+                    
+                    // Encabezados
+                    data.push([
+                        'ID', 'Cliente', 'Teléfono', 'Fecha Entrega', 'Fecha Realización', 
+                        'Productos', 'Bases Madera', 'Mensaje Base', 'Personalización Velas', 
+                        'Total', 'Estado'
+                    ]);
+                    
+                    // Datos
+                    orders.forEach(order => {
+                        data.push([
+                            order.id || '',
+                            order.nombreCliente || '',
+                            order.telefonoCliente || '',
+                            order.fechaEntrega || '',
+                            order.fechaRealizacion || '',
+                            order.productos || '',
+                            order.basesMadera || '',
+                            order.mensajeBaseMadera || '',
+                            order.personalizacionVelas || '',
+                            order.total || '',
+                            order.status || 'Pendiente'
+                        ]);
+                    });
+                    
+                    // Crear libro de trabajo
+                    const ws = XLSX.utils.aoa_to_sheet(data);
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'Pedidos');
+                    
+                    // Generar archivo y descargar
+                    const fileName = `pedidos_velas_${new Date().toISOString().slice(0,10)}.xlsx`;
+                    XLSX.writeFile(wb, fileName);
+                    
+                    showToast('Datos exportados exitosamente a Excel.', 'success');
+                } catch (error) {
+                    console.error('Error al exportar a Excel:', error);
+                    showToast('Error al exportar a Excel.', 'error');
+                }
+            }
+            
+            // Función para importar desde Excel
+            function importFromExcel(file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        
+                        // Obtener la primera hoja
+                        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                        
+                        // Verificar que tenga datos
+                        if (jsonData.length <= 1) {
+                            showToast('El archivo no contiene datos válidos.', 'error');
+                            return;
+                        }
+                        
+                        // Obtener encabezados
+                        const headers = jsonData[0];
+                        
+                        // Verificar estructura básica
+                        if (!headers.includes('Cliente') || !headers.includes('Productos') || !headers.includes('Total')) {
+                            showToast('El archivo no tiene el formato correcto.', 'error');
+                            return;
+                        }
+                        
+                        // Procesar datos
+                        const orders = [];
+                        for (let i = 1; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (row.length === 0) continue;
+                            
+                            const order = {
+                                id: row[headers.indexOf('ID')] || generateId(),
+                                nombreCliente: row[headers.indexOf('Cliente')] || '',
+                                telefonoCliente: row[headers.indexOf('Teléfono')] || '',
+                                fechaEntrega: row[headers.indexOf('Fecha Entrega')] || '',
+                                fechaRealizacion: row[headers.indexOf('Fecha Realización')] || new Date().toLocaleString('es-ES'),
+                                productos: row[headers.indexOf('Productos')] || '',
+                                basesMadera: row[headers.indexOf('Bases Madera')] || 'No',
+                                mensajeBaseMadera: row[headers.indexOf('Mensaje Base')] || 'No aplica',
+                                personalizacionVelas: row[headers.indexOf('Personalización Velas')] || 'Palabras predeterminadas',
+                                total: row[headers.indexOf('Total')] || 0,
+                                status: row[headers.indexOf('Estado')] || 'Pendiente'
+                            };
+                            
+                            orders.push(order);
+                        }
+                        
+                        if (orders.length === 0) {
+                            showToast('No se encontraron pedidos válidos en el archivo.', 'warning');
+                            return;
+                        }
+                        
+                        // Confirmar importación
+                        showConfirm(
+                            `¿Importar ${orders.length} pedido(s) desde el archivo? Los pedidos existentes se mantendrán.`,
+                            function() {
+                                // Combinar con datos existentes
+                                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                                const combined = [...existing];
+                                
+                                // Agregar nuevos pedidos, evitando duplicados por ID
+                                orders.forEach(newOrder => {
+                                    const existingIndex = combined.findIndex(o => o.id === newOrder.id);
+                                    if (existingIndex >= 0) {
+                                        combined[existingIndex] = newOrder;
+                                    } else {
+                                        combined.push(newOrder);
+                                    }
+                                });
+                                
+                                // Guardar en localStorage
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify(combined));
+                                renderOrderHistory();
+                                showToast(`${orders.length} pedido(s) importados exitosamente.`, 'success');
+                            },
+                            function() {
+                                // Cancelar
+                                showToast('Importación cancelada.', 'info');
+                            }
+                        );
+                        
+                    } catch (error) {
+                        console.error('Error al importar desde Excel:', error);
+                        showToast('Error al importar desde Excel. Verifique el formato del archivo.', 'error');
+                    }
+                };
+                
+                reader.onerror = function() {
+                    showToast('Error al leer el archivo.', 'error');
+                };
+                
+                reader.readAsArrayBuffer(file);
+            }
             
             // Confirmar pedido (crear o actualizar)
             confirmOrderBtn.addEventListener('click', async function() {
@@ -1653,6 +1907,43 @@
                 return Date.now().toString(36) + '-' + Math.random().toString(36).substr(2,6);
             }
 
+            // Calcular totales del historial
+            function calculateHistoryTotals(orders) {
+                let totalCajas = 0;
+                let totalBolsas = 0;
+                let totalDinero = 0;
+                
+                orders.forEach(order => {
+                    // Sumar total en dinero
+                    totalDinero += parseInt(order.total) || 0;
+                    
+                    // Contar cajas y bolsas
+                    try {
+                        const productos = JSON.parse(order.productos);
+                        productos.forEach(producto => {
+                            if (producto.packaging === 'Caja') {
+                                totalCajas += producto.quantity || 0;
+                            } else if (producto.packaging === 'Bolsa') {
+                                totalBolsas += producto.quantity || 0;
+                            }
+                        });
+                    } catch (e) {
+                        // Si hay error al parsear, intentar contar manualmente
+                        const productosStr = order.productos || '';
+                        if (productosStr.includes('Caja')) {
+                            const match = productosStr.match(/Caja.*x(\d+)/);
+                            if (match) totalCajas += parseInt(match[1]) || 1;
+                        }
+                        if (productosStr.includes('Bolsa')) {
+                            const match = productosStr.match(/Bolsa.*x(\d+)/);
+                            if (match) totalBolsas += parseInt(match[1]) || 1;
+                        }
+                    }
+                });
+                
+                return { totalCajas, totalBolsas, totalDinero };
+            }
+
             // Renderizar historial de pedidos
             function renderOrderHistory() {
                 const tbody = document.getElementById('ordersHistoryBody');
@@ -1677,6 +1968,12 @@
                 if (!orders || orders.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>';
                     if (paginationControls) paginationControls.innerHTML = '';
+                    
+                    // Actualizar totales
+                    totalCajasEl.textContent = '0';
+                    totalBolsasEl.textContent = '0';
+                    totalDineroEl.textContent = '$0';
+                    
                     return;
                 }
 
@@ -1690,6 +1987,12 @@
                 if (filtered.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" style="color:#666; text-align:center;">No hay resultados para los filtros seleccionados.</td></tr>';
                     if (paginationControls) paginationControls.innerHTML = '';
+                    
+                    // Actualizar totales
+                    totalCajasEl.textContent = '0';
+                    totalBolsasEl.textContent = '0';
+                    totalDineroEl.textContent = '$0';
+                    
                     return;
                 }
 
@@ -1737,6 +2040,12 @@
                 if (paginationControls) {
                     renderPaginationControls(totalPages, currentPage, totalItems);
                 }
+                
+                // Calcular y mostrar totales
+                const totals = calculateHistoryTotals(filtered);
+                totalCajasEl.textContent = totals.totalCajas;
+                totalBolsasEl.textContent = totals.totalBolsas;
+                totalDineroEl.textContent = `$${totals.totalDinero.toLocaleString()}`;
             }
 
             // Borrar historial completo (expuesto globalmente)
