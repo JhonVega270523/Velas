@@ -770,13 +770,8 @@
                 box-sizing: border-box;
             }
 
-            /* Small helper text to indicate expected date format */
-            .date-hint {
-                display: block;
-                font-size: 0.9rem;
-                color: #666;
-                margin-top: 6px;
-            }
+            /* Small helper text to indicate expected date format: show only on small screens */
+                .date-hint { display: none; }
 
             /* Prevent horizontal scrolling in the order tab */
             #order-tab {
@@ -843,6 +838,53 @@
             z-index: 12000;
             display: none;
         }
+
+        /* Estado del pedido: botón sutil */
+        .status-btn {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.08);
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 92px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .status-pendiente {
+            background: #fff5f5;
+            color: #c0392b;
+            border-color: rgba(192,57,43,0.12);
+        }
+        .status-entregado {
+            background: #f3fff4;
+            color: #1e8f3e;
+            border-color: rgba(30,143,62,0.12);
+        }
+
+        /* Paginación simple */
+        .pagination-btn {
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-width:36px;
+            height:36px;
+            padding:6px 10px;
+            border-radius:6px;
+            border:1px solid #e0e0e0;
+            background:#fff;
+            cursor:pointer;
+            font-weight:600;
+            color:var(--primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+        .pagination-btn:hover { background: #f5f5f5; }
+        .pagination-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .pagination-info { color:#666; font-size:0.95rem; margin-left:8px; }
 
         #confirmModal > div {
             background: #fff;
@@ -1083,29 +1125,32 @@
                     <div style="color:#666; font-size:0.95rem;">Pedidos guardados localmente en su navegador.</div>
                 </div>
                 <div class="filters-row" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
-                    <input id="searchClientInput" type="text" placeholder="Buscar por cliente..." style="flex:3;padding:10px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;min-width:180px;" />
-                    <div style="display:flex;flex-direction:column;flex:1;max-width:180px;">
-                        <input id="searchDateInput" type="date" style="padding:8px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;" />
-                        <small class="date-hint" style="text-align:center;">Formato: dd/mm/aaaa</small>
-                    </div>
+                    <select id="stateFilterSelect" class="state-filter">
+                        <option value="">Todos los estados</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Entregado">Entregado</option>
+                    </select>
+                    <input id="searchClientInput" class="client-search" type="text" placeholder="Buscar por cliente..." />
                     <button id="clearFiltersBtn" class="btn btn-xs" style="padding:8px 10px;">Limpiar</button>
                 </div>
                 <div style="overflow:auto;">
                     <table class="unified-price-table" style="width:100%;">
                         <thead>
-                            <tr>
-                                <th>Cliente</th>
-                                <th>Fecha Entrega</th>
-                                <th>Productos</th>
-                                <th>Total</th>
-                                <th>Acciones</th>
-                            </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha Entrega</th>
+                                        <th>Productos</th>
+                                        <th>Total</th>
+                                        <th>Acciones</th>
+                                    </tr>
                         </thead>
                         <tbody id="ordersHistoryBody">
-                            <tr><td colspan="5" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>
+                            <tr><td colspan="6" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>
                         </tbody>
                     </table>
                 </div>
+                <div id="paginationControls" style="margin-top:10px;display:flex;gap:8px;align-items:center;justify-content:center;"></div>
             </div>
         </div>
         
@@ -1146,7 +1191,8 @@
             const loadingDiv = document.getElementById('loading');
             const productsContainer = document.getElementById('productsContainer');
             const searchClientInput = document.getElementById('searchClientInput');
-            const searchDateInput = document.getElementById('searchDateInput');
+            const stateFilterSelect = document.getElementById('stateFilterSelect');
+            const paginationControls = document.getElementById('paginationControls');
             const clearFiltersBtn = document.getElementById('clearFiltersBtn');
             const orderModalEl = document.getElementById('orderDetailsModal');
             const addProductBtn = document.getElementById('addProductBtn');
@@ -1159,6 +1205,8 @@
             
             let productCount = 0;
             let editingOrderId = null;
+            const PAGE_SIZE = 15;
+            let currentPage = 1;
             
             // Configurar fecha mínima como hoy
             const today = new Date();
@@ -1229,6 +1277,48 @@
                 });
             };
 
+            // Render pagination controls helper
+            function renderPaginationControls(totalPages, current, totalItems) {
+                if (!paginationControls) return;
+                let html = '';
+                // Prev
+                html += `<button class="pagination-btn" data-action="prev">&larr;</button>`;
+
+                // Page numbers (show window)
+                const maxButtons = 7;
+                let start = Math.max(1, current - Math.floor(maxButtons/2));
+                let end = Math.min(totalPages, start + maxButtons - 1);
+                if (end - start < maxButtons - 1) {
+                    start = Math.max(1, end - maxButtons + 1);
+                }
+                for (let p = start; p <= end; p++) {
+                    const cls = p === current ? 'pagination-btn active' : 'pagination-btn';
+                    html += `<button class="${cls}" data-page="${p}">${p}</button>`;
+                }
+
+                // Next
+                html += `<button class="pagination-btn" data-action="next">&rarr;</button>`;
+                html += `<span class="pagination-info">Mostrando ${Math.min((current-1)*PAGE_SIZE+1, totalItems)}-${Math.min(current*PAGE_SIZE, totalItems)} de ${totalItems}</span>`;
+                paginationControls.innerHTML = html;
+
+                // Attach handlers
+                const buttons = paginationControls.querySelectorAll('button.pagination-btn');
+                buttons.forEach(b => {
+                    const act = b.getAttribute('data-action');
+                    const p = b.getAttribute('data-page');
+                    b.addEventListener('click', function() {
+                        if (act === 'prev') {
+                            if (currentPage > 1) currentPage--;
+                        } else if (act === 'next') {
+                            if (currentPage < totalPages) currentPage++;
+                        } else if (p) {
+                            currentPage = parseInt(p);
+                        }
+                        renderOrderHistory();
+                    });
+                });
+            }
+
             window.showConfirm = function(message, onConfirm, onCancel) {
                 const modal = document.getElementById('confirmModal');
                 const msg = document.getElementById('confirmModalMessage');
@@ -1253,11 +1343,12 @@
             };
 
             // Buscar / filtrar
-            if (searchClientInput) searchClientInput.addEventListener('input', renderOrderHistory);
-            if (searchDateInput) searchDateInput.addEventListener('change', renderOrderHistory);
+            if (searchClientInput) searchClientInput.addEventListener('input', function(){ currentPage = 1; renderOrderHistory(); });
+            if (stateFilterSelect) stateFilterSelect.addEventListener('change', function(){ currentPage = 1; renderOrderHistory(); });
             if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', function() {
                 if (searchClientInput) searchClientInput.value = '';
-                if (searchDateInput) searchDateInput.value = '';
+                if (stateFilterSelect) stateFilterSelect.value = '';
+                currentPage = 1;
                 renderOrderHistory();
             });
             
@@ -1297,6 +1388,18 @@
                 // Procesar personalización - si está vacío, usar "Palabras predeterminadas"
                 const personalizacionFinal = personalizations ? lines.join(' | ') : 'Palabras predeterminadas';
                 
+                // Determinar estado del pedido: conservar si estamos editando
+                let status = 'Pendiente';
+                if (editingOrderId) {
+                    try {
+                        const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                        const eo = existing.find(x => x.id === editingOrderId);
+                        if (eo && eo.status) status = eo.status;
+                    } catch (e) {
+                        // noop
+                    }
+                }
+
                 // Crear objeto de pedido
                 const order = {
                     id: editingOrderId || generateId(),
@@ -1306,7 +1409,8 @@
                     personalizacionVelas: personalizacionFinal,
                     fechaRealizacion: new Date().toLocaleString('es-ES'),
                     fechaEntrega: deliveryDate,
-                    total: calculateTotal()
+                    total: calculateTotal(),
+                    status: status
                 };
                 
                 // Agregar bases de madera si están seleccionadas
@@ -1568,27 +1672,37 @@
                 }
                 // Obtener filtros
                 const nameFilter = (document.getElementById('searchClientInput') && document.getElementById('searchClientInput').value || '').trim().toLowerCase();
-                const dateFilter = (document.getElementById('searchDateInput') && document.getElementById('searchDateInput').value) || '';
+                const stateFilter = (document.getElementById('stateFilterSelect') && document.getElementById('stateFilterSelect').value) || '';
 
                 if (!orders || orders.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>';
+                    if (paginationControls) paginationControls.innerHTML = '';
                     return;
                 }
 
-                // Aplicar filtros
+                // Aplicar filtros (por nombre y/o estado)
                 const filtered = orders.filter(o => {
                     if (nameFilter && !(o.nombreCliente||'').toLowerCase().includes(nameFilter)) return false;
-                    if (dateFilter && o.fechaEntrega !== dateFilter) return false;
+                    if (stateFilter && ((o.status||'') !== stateFilter)) return false;
                     return true;
                 });
 
                 if (filtered.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="color:#666; text-align:center;">No hay resultados para los filtros seleccionados.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="6" style="color:#666; text-align:center;">No hay resultados para los filtros seleccionados.</td></tr>';
+                    if (paginationControls) paginationControls.innerHTML = '';
                     return;
                 }
 
+                // Paginación
+                const totalItems = filtered.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+                if (currentPage > totalPages) currentPage = 1;
+                const startIndex = (currentPage - 1) * PAGE_SIZE;
+                const pageItems = filtered.slice(startIndex, startIndex + PAGE_SIZE);
+
                 let html = '';
-                filtered.forEach(o => {
+                pageItems.forEach((o, idx) => {
+                    const globalIndex = startIndex + idx; // index in filtered
                     let productosDisplay = '';
                     try {
                         const prods = JSON.parse(o.productos);
@@ -1598,10 +1712,13 @@
                     }
 
                     const totalNum = parseInt(o.total) || 0;
-
+                    const statusLabel = o.status || 'Pendiente';
+                    const statusColor = statusLabel.toLowerCase() === 'entregado' ? 'green' : '#666';
+                    const rowNumber = (globalIndex + 1);
                     html += `
                         <tr>
-                            <td>${o.nombreCliente}</td>
+                            <td style="width:48px;">${rowNumber}</td>
+                            <td>${o.nombreCliente}<br><small style="color:${statusColor};font-weight:600">${statusLabel}</small></td>
                             <td>${o.fechaEntrega}</td>
                             <td>${productosDisplay}</td>
                             <td class="price">$${totalNum.toLocaleString()}</td>
@@ -1615,6 +1732,11 @@
                 });
 
                 tbody.innerHTML = html;
+
+                // Render pagination controls
+                if (paginationControls) {
+                    renderPaginationControls(totalPages, currentPage, totalItems);
+                }
             }
 
             // Borrar historial completo (expuesto globalmente)
@@ -1639,6 +1761,31 @@
                 });
             };
 
+            // Cambiar estado de un pedido
+            window.changeOrderStatus = function(id, newStatus) {
+                try {
+                    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                    const idx = existing.findIndex(o => o.id === id);
+                    if (idx === -1) {
+                        showToast('Pedido no encontrado', 'error');
+                        return;
+                    }
+                    existing[idx].status = newStatus;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+                    renderOrderHistory();
+                    showToast('Estado actualizado: ' + newStatus, 'success', 1800);
+                    // Si el modal está abierto con el mismo pedido, actualizar su contenido
+                    const modal = document.getElementById('orderDetailsModal');
+                    if (modal && modal.style.display !== 'none') {
+                        // Re-open details to refresh content
+                        viewOrderDetails(id);
+                    }
+                } catch (e) {
+                    console.error('Error al cambiar estado:', e);
+                    showToast('No se pudo actualizar el estado', 'error');
+                }
+            };
+
             // Ver detalles de un pedido
             window.viewOrderDetails = function(id) {
                 const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -1649,6 +1796,9 @@
                 html += `<p><strong>Cliente:</strong> ${o.nombreCliente}</p>`;
                 html += `<p><strong>Teléfono:</strong> ${o.telefonoCliente || 'No proporcionado'}</p>`;
                 html += `<p><strong>Fecha de entrega:</strong> ${o.fechaEntrega}</p>`;
+                const _statusText = o.status || 'Pendiente';
+                const _statusClass = (_statusText.toLowerCase() === 'entregado') ? 'status-entregado' : 'status-pendiente';
+                html += `<p><strong>Estado:</strong> <button id="orderStatusBtn" class="status-btn ${_statusClass}" style="margin-left:8px;">${_statusText}</button></p>`;
                 html += `<hr>`;
                 html += `<h4>Productos</h4>`;
                 try {
@@ -1671,6 +1821,20 @@
                     orderModalEl.style.display = 'flex';
                 } else {
                     document.getElementById('orderDetailsModal').style.display = 'flex';
+                }
+
+                // Inicializar botón de estado (click alterna Pendiente <-> Entregado)
+                const statusBtn = document.getElementById('orderStatusBtn');
+                if (statusBtn) {
+                    statusBtn.addEventListener('click', function() {
+                        const current = (statusBtn.textContent || '').trim();
+                        const newStatus = current === 'Entregado' ? 'Pendiente' : 'Entregado';
+                        // Feedback inmediato: actualizar apariencia
+                        statusBtn.textContent = newStatus;
+                        statusBtn.classList.toggle('status-entregado', newStatus === 'Entregado');
+                        statusBtn.classList.toggle('status-pendiente', newStatus === 'Pendiente');
+                        changeOrderStatus(id, newStatus);
+                    });
                 }
             };
 
