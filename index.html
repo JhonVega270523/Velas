@@ -1949,11 +1949,17 @@
                 const tbody = document.getElementById('ordersHistoryBody');
                 if (!tbody) return;
                 let orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') || [];
-                // Normalizar pedidos antiguos: si falta 'id', agregar uno.
+                
+                // CORRECCIÓN: Normalizar pedidos antiguos - agregar estado "Pendiente" si no existe
                 let needsSave = false;
                 orders = orders.map(o => {
                     if (!o.id) {
                         o.id = generateId();
+                        needsSave = true;
+                    }
+                    // CORRECCIÓN: Asignar estado "Pendiente" por defecto si no existe
+                    if (!o.status) {
+                        o.status = 'Pendiente';
                         needsSave = true;
                     }
                     return o;
@@ -1961,6 +1967,7 @@
                 if (needsSave) {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
                 }
+                
                 // Obtener filtros
                 const nameFilter = (document.getElementById('searchClientInput') && document.getElementById('searchClientInput').value || '').trim().toLowerCase();
                 const stateFilter = (document.getElementById('stateFilterSelect') && document.getElementById('stateFilterSelect').value) || '';
@@ -1980,7 +1987,8 @@
                 // Aplicar filtros (por nombre y/o estado)
                 const filtered = orders.filter(o => {
                     if (nameFilter && !(o.nombreCliente||'').toLowerCase().includes(nameFilter)) return false;
-                    if (stateFilter && ((o.status||'') !== stateFilter)) return false;
+                    // CORRECCIÓN: Filtrar por estado - ahora funciona para todos los pedidos
+                    if (stateFilter && ((o.status||'Pendiente') !== stateFilter)) return false;
                     return true;
                 });
 
@@ -2015,7 +2023,7 @@
                     }
 
                     const totalNum = parseInt(o.total) || 0;
-                    const statusLabel = o.status || 'Pendiente';
+                    const statusLabel = o.status || 'Pendiente'; // CORRECCIÓN: Valor por defecto
                     const statusColor = statusLabel.toLowerCase() === 'entregado' ? 'green' : '#666';
                     const rowNumber = (globalIndex + 1);
                     html += `
@@ -2105,7 +2113,7 @@
                 html += `<p><strong>Cliente:</strong> ${o.nombreCliente}</p>`;
                 html += `<p><strong>Teléfono:</strong> ${o.telefonoCliente || 'No proporcionado'}</p>`;
                 html += `<p><strong>Fecha de entrega:</strong> ${o.fechaEntrega}</p>`;
-                const _statusText = o.status || 'Pendiente';
+                const _statusText = o.status || 'Pendiente'; // CORRECCIÓN: Valor por defecto
                 const _statusClass = (_statusText.toLowerCase() === 'entregado') ? 'status-entregado' : 'status-pendiente';
                 html += `<p><strong>Estado:</strong> <button id="orderStatusBtn" class="status-btn ${_statusClass}" style="margin-left:8px;">${_statusText}</button></p>`;
                 html += `<hr>`;
