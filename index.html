@@ -743,6 +743,21 @@
                 width: 100%;
             }
 
+            /* Center the three nav tab labels vertically and horizontally */
+            .nav-tabs {
+                align-items: center;
+            }
+            .nav-tab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding-top: 12px;
+                padding-bottom: 12px;
+                min-height: 72px;
+                white-space: normal;
+            }
+
             /* Ensure date inputs and other form controls show readable text on mobile */
             input[type="date"],
             input[type="text"],
@@ -753,6 +768,14 @@
                 color: #222;
                 -webkit-text-fill-color: #222; /* iOS/Safari */
                 box-sizing: border-box;
+            }
+
+            /* Small helper text to indicate expected date format */
+            .date-hint {
+                display: block;
+                font-size: 0.9rem;
+                color: #666;
+                margin-top: 6px;
             }
 
             /* Prevent horizontal scrolling in the order tab */
@@ -888,6 +911,7 @@
                         <div class="form-group">
                             <label for="deliveryDate">Fecha de entrega deseada:</label>
                             <input type="date" id="deliveryDate" min="">
+                            <small class="date-hint">Formato: dd/mm/aaaa</small>
                         </div>
                     </div>
                     
@@ -1060,7 +1084,10 @@
                 </div>
                 <div class="filters-row" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
                     <input id="searchClientInput" type="text" placeholder="Buscar por cliente..." style="flex:3;padding:10px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;min-width:180px;" />
-                    <input id="searchDateInput" type="date" style="flex:1;max-width:180px;padding:8px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;" />
+                    <div style="display:flex;flex-direction:column;flex:1;max-width:180px;">
+                        <input id="searchDateInput" type="date" style="padding:8px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;" />
+                        <small class="date-hint" style="text-align:center;">Formato: dd/mm/aaaa</small>
+                    </div>
                     <button id="clearFiltersBtn" class="btn btn-xs" style="padding:8px 10px;">Limpiar</button>
                 </div>
                 <div style="overflow:auto;">
