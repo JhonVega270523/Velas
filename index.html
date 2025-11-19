@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor de Pedidos - Velas Navideñas</title>
+    <title>Gestor de Pedidos - Detalles Laurel Medellín</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -218,9 +218,13 @@
         }
         
         .btn-sm {
-            padding: 10px;
+            padding: 8px 12px;
             font-size: 0.9rem;
-            min-width: 40px;
+        }
+        
+        .btn-xs {
+            padding: 6px 10px;
+            font-size: 0.8rem;
         }
         
         .hidden {
@@ -289,115 +293,229 @@
             display: block;
         }
         
-        /* Historial de pedidos */
-        .order-history {
-            max-height: 600px;
-            overflow-y: auto;
+        /* Productos - Diseño Simplificado */
+        .products-section {
+            margin-bottom: 25px;
         }
         
-        .search-container {
-            margin-bottom: 20px;
-        }
-        
-        .orders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }
-        
-        .order-card {
-            background: white;
-            border-radius: 10px;
+        .product-item {
+            background: #f8f9fa;
+            border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-            border-left: 4px solid var(--secondary);
-            transition: all 0.3s;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+            position: relative;
         }
         
-        .order-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-        }
-        
-        .order-header {
+        .product-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .product-number {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+        
+        .remove-product {
+            background: transparent;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .remove-product:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        
+        .product-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .quantity-input {
+            width: 100%;
+        }
+        
+        .add-product-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px dashed var(--secondary);
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-product-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--primary);
+        }
+        
+        /* Bases de Madera - Diseño Mejorado */
+        .wood-bases-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .wood-bases-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+        
+        .wood-bases-header:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .wood-bases-header input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .wood-bases-header label {
+            margin-bottom: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .wood-bases-content {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .wood-bases-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        .wood-base-price {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+        }
+        
+        .wood-base-price .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .wood-base-price .label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .wood-base-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .wood-base-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .wood-base-quantity label {
+            margin-bottom: 0;
+            min-width: 100px;
+        }
+        
+        .wood-base-quantity input {
+            width: 100px;
+        }
+        
+        /* Resumen */
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 10px;
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
         
-        .order-customer {
+        .summary-total {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--primary);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #ddd;
         }
         
-        .order-date {
-            color: #7f8c8d;
-            font-size: 0.9rem;
+        .price {
+            font-weight: bold;
+            color: var(--accent);
         }
         
-        .order-content {
+        /* Galería de imágenes de velas */
+        .candle-gallery {
             display: flex;
+            justify-content: space-between;
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
         }
         
-        .candle-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid var(--secondary);
-            flex-shrink: 0;
+        .candle-gallery-item {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
         }
         
-        .modal-candle-image {
-            width: 120px;
+        .candle-gallery-image {
+            width: 100%;
             height: 120px;
             border-radius: 8px;
             object-fit: cover;
             border: 2px solid var(--secondary);
-            margin: 0 auto 15px;
-            display: block;
+            margin-bottom: 8px;
         }
         
-        .order-details {
-            flex: 1;
-        }
-        
-        .order-detail-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .order-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: auto;
-            gap: 8px;
-        }
-        
-        .order-actions .btn {
-            flex: 1;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .no-orders {
-            text-align: center;
-            padding: 40px;
-            color: #7f8c8d;
-            font-style: italic;
-            grid-column: 1 / -1;
+        .candle-gallery-label {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
         }
         
         /* Tabla de precios unificada */
@@ -432,226 +550,412 @@
             color: var(--primary);
         }
         
-        /* Modal */
-        .modal {
+        /* Loading */
+        .loading {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            padding: 20px;
         }
         
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            border: 1px solid #e0e0e0;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
         }
         
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--secondary);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--primary);
+        /* Línea contador para textarea */
+        .line-counter {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: right;
+            margin-top: 5px;
         }
         
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--primary);
-            transition: color 0.3s;
+        .line-counter.warning {
+            color: var(--warning);
         }
         
-        .close-modal:hover {
-            color: var(--accent);
+        .line-counter.error {
+            color: var(--danger);
         }
         
-        .personalization-list {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .personalization-item {
-            background-color: rgba(212, 175, 55, 0.1);
-            padding: 6px 10px;
-            border-radius: 4px;
-            border-left: 2px solid var(--secondary);
-            font-size: 0.9rem;
-        }
-        
-        .wood-message {
-            background-color: rgba(139, 69, 19, 0.1);
-            padding: 8px 12px;
-            margin-top: 8px;
-            border-radius: 4px;
-            border-left: 2px solid var(--accent);
-            font-size: 0.9rem;
-        }
-        
-        .price {
-            font-weight: bold;
-            color: var(--accent);
-        }
-        
-        /* Vista móvil */
         @media (max-width: 768px) {
-            .col {
-                flex: 100%;
+            .container {
+                padding: 10px;
             }
             
-            .nav-tabs {
-                flex-direction: column;
-            }
-            
-            .orders-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .order-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .order-date {
-                margin-top: 5px;
+            header {
+                padding: 20px 0;
+                margin-bottom: 20px;
             }
             
             h1 {
-                font-size: 2.2rem;
-            }
-            
-            .order-content {
-                flex-direction: column;
-            }
-            
-            .candle-image {
-                width: 100%;
-                height: 150px;
+                font-size: 1.8rem;
                 margin-bottom: 10px;
             }
             
-            .order-actions {
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .nav-tabs {
                 flex-direction: row;
-                gap: 5px;
             }
             
-            .order-actions .btn {
-                flex: 1;
-                padding: 10px;
-                min-width: auto;
+            .nav-tab {
+                padding: 12px;
+                font-size: 0.9rem;
             }
             
-            .btn-text {
-                display: none;
+            .col {
+                flex: 100%;
+                padding: 0 10px;
+            }
+            
+            .card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .card-title {
+                font-size: 1.3rem;
+            }
+            
+            .candle-gallery {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .candle-gallery-item {
+                min-width: 100%;
+            }
+            
+            .candle-gallery-image {
+                height: 150px;
+            }
+            
+            .product-fields {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .wood-bases-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .wood-base-quantity {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .wood-base-quantity input {
+                width: 100%;
+            }
+            /* Responsive adjustments for history table, modal and filters */
+            .filters-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters-row input,
+            .filters-row button {
+                width: 100% !important;
+                max-width: none !important;
+            }
+
+            .unified-price-table th, .unified-price-table td {
+                padding: 10px 8px;
+                font-size: 0.95rem;
+            }
+
+            .unified-price-table td .btn {
+                display: inline-block;
+                margin: 6px 6px 0 0;
+            }
+
+            .btn-xs, .btn-sm {
+                padding: 6px 8px;
+                font-size: 0.85rem;
+            }
+
+            #orderDetailsModal > div {
+                width: calc(100% - 28px);
+                max-width: 720px;
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .unified-price-table th, .unified-price-table td {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+
+            .filters-row {
+                flex-wrap: wrap;
+            }
+
+            .filters-row input[type="date"] {
+                max-width: 160px;
+            }
+
+            .product-item {
+                padding: 12px;
+            }
+
+            .product-number {
+                font-size: 0.95rem;
             }
         }
         
-        /* Vista desktop */
-        @media (min-width: 769px) {
-            .btn-text {
-                display: none;
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .nav-tab {
+                padding: 10px 8px;
+                font-size: 0.8rem;
+            }
+            
+            header {
+                padding: 15px 0;
             }
         }
+        /* Toaster notifications */
+        #toastContainer {
+            position: fixed;
+            right: 18px;
+            top: 18px;
+            z-index: 11000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 220px;
+            max-width: 360px;
+            background: #fff;
+            color: #222;
+            padding: 12px 14px;
+            border-radius: 8px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            border-left: 4px solid var(--primary);
+            opacity: 0;
+            transform: translateY(-8px) scale(0.98);
+            transition: all 220ms ease;
+            pointer-events: auto;
+            font-size: 0.95rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.info { border-left-color: var(--accent); }
+
+        .toast small { display:block; color:#666; margin-top:6px; font-size:0.85rem; }
+
+        /* Confirm modal (simple) */
+        #confirmModal {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 12000;
+            display: none;
+        }
+
+        #confirmModal > div {
+            background: #fff;
+            border-radius: 8px;
+            max-width: 520px;
+            width: 92%;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Gestor de Pedidos</h1>
+            <h1>Gestor de Pedidos - Detalles Laurel Medellín</h1>
             <p class="subtitle">Velas Navideñas Personalizadas</p>
         </header>
         
         <div class="nav-tabs">
-            <div class="nav-tab active" data-tab="order">Información del Pedido</div>
-            <div class="nav-tab" data-tab="prices">Precios de Referencia</div>
-            <div class="nav-tab" data-tab="summary">Historial de Pedidos</div>
+            <div class="nav-tab active" data-tab="order">Realiza tu Pedido</div>
+            <div class="nav-tab" data-tab="prices">Precios</div>
+            <div class="nav-tab" data-tab="history">Historial</div>
+        </div>
+
+        <!-- Modal Detalles -->
+        <div id="orderDetailsModal" class="hidden" style="position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:9999;display:none;">
+            <div style="background:#fff;border-radius:8px;max-width:860px;width:95%;padding:20px;position:relative;">
+                <button onclick="closeOrderModal()" style="position:absolute;right:12px;top:12px;background:transparent;border:none;font-size:18px;cursor:pointer;color:#333">✕</button>
+                <h3 style="margin-top:0;color:var(--primary);">Detalle del Pedido</h3>
+                <div id="orderDetailsContent" style="max-height:60vh;overflow:auto;padding-top:8px;color:#333"></div>
+                <div style="text-align:right;margin-top:12px;"></div>
+            </div>
+        </div>
+        <!-- Toast container -->
+        <div id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+        <!-- Confirmación global -->
+        <div id="confirmModal">
+            <div>
+                <div id="confirmModalMessage" style="color:#333;margin-bottom:12px;"></div>
+                <div style="text-align:right;">
+                    <button id="confirmCancelBtn" class="btn btn-xs" style="margin-right:8px;">No</button>
+                    <button id="confirmOkBtn" class="btn btn-xs btn-success">Sí</button>
+                </div>
+            </div>
         </div>
         
-        <!-- Pestaña Información del Pedido -->
+        <!-- Pestaña Realiza tu Pedido -->
         <div id="order-tab" class="tab-content active">
             <div class="row">
                 <div class="col">
                     <div class="card">
-                        <h2 class="card-title">Información del Pedido</h2>
-                        
-                        <div class="form-group">
-                            <label for="packaging">Tipo de Empaque:</label>
-                            <select id="packaging">
-                                <option value="">Seleccione un empaque</option>
-                                <option value="caja">Caja</option>
-                                <option value="bolsa">Bolsa</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="candleType">Tipo de Vela:</label>
-                            <select id="candleType">
-                                <option value="">Seleccione un tipo de vela</option>
-                                <option value="blancas">Blancas</option>
-                                <option value="mirellas">Mirellas</option>
-                                <option value="pesebre">Pesebre</option>
-                                <option value="colores">Colores</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="woodBase">
-                                <label for="woodBase">Añadir Base en Madera (+$12.000)</label>
-                            </div>
-                        </div>
-                        
-                        <div id="woodBaseMessageGroup" class="form-group hidden">
-                            <label for="woodBaseMessage">Mensaje para personalizar la base en madera:</label>
-                            <textarea id="woodBaseMessage" rows="3" placeholder="Escribe el mensaje para personalizar la base..."></textarea>
-                        </div>
+                        <h2 class="card-title">Información del Cliente</h2>
                         
                         <div class="form-group">
                             <label for="customerName">Nombre de quien realiza el pedido:</label>
                             <input type="text" id="customerName" placeholder="Ingrese su nombre completo">
                         </div>
+                        
+                        <div class="form-group">
+                            <label for="customerPhone">Teléfono de contacto:</label>
+                            <input type="tel" id="customerPhone" placeholder="Ingrese su número de teléfono">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="deliveryDate">Fecha de entrega deseada:</label>
+                            <input type="date" id="deliveryDate" min="">
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2 class="card-title">Productos del Pedido</h2>
+                        
+                        <div class="products-section">
+                            <div id="productsContainer">
+                                <!-- Los productos se agregarán aquí dinámicamente -->
+                            </div>
+                            
+                            <button class="add-product-btn" id="addProductBtn">
+                                <i class="fas fa-plus"></i>
+                                Agregar otro producto
+                            </button>
+                        </div>
+                        
+                        <div class="wood-bases-section">
+                            <div class="wood-bases-header">
+                                <input type="checkbox" id="addWoodBases" onchange="toggleWoodBases()">
+                                <label for="addWoodBases">Bases de Madera Personalizadas</label>
+                            </div>
+                            
+                            <div id="woodBasesContainer" class="hidden">
+                                <div class="wood-bases-content">
+                                    <div class="wood-bases-grid">
+                                        <div class="wood-base-price">
+                                            <span class="price">$12.000</span>
+                                            <span class="label">cada base</span>
+                                        </div>
+                                        <div class="wood-base-fields">
+                                            <div class="wood-base-quantity">
+                                                <label for="woodBasesQuantity">Cantidad:</label>
+                                                <input type="number" id="woodBasesQuantity" min="1" value="1" class="quantity-input" onchange="updateOrderSummary()">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="woodBaseMessage">Mensaje para personalizar (opcional):</label>
+                                                <textarea id="woodBaseMessage" rows="3" placeholder="Escriba el mensaje que desea en las bases de madera..." onchange="updateOrderSummary()"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="card">
                         <h2 class="card-title">Personalización de Velas</h2>
-                        <p>Ingrese hasta 10 nombres o palabras para personalizar las velas (una por línea):</p>
+                        <p>Ingrese hasta 10 nombres o palabras para personalizar las velas (una por línea) o deje vacío si desea las palabras predeterminadas:</p>
                         <div class="form-group">
-                            <textarea id="candlePersonalization" rows="10" placeholder="Escriba cada nombre o palabra en una línea diferente..."></textarea>
+                            <textarea id="candlePersonalization" rows="6" placeholder="Escriba cada nombre o palabra en una línea diferente..." oninput="countLines(this)"></textarea>
+                            <div id="lineCounter" class="line-counter">Líneas: 0/10</div>
                         </div>
                     </div>
                     
-                    <button id="confirmOrderBtn" class="btn btn-success btn-block">
-                        <i class="fas fa-check"></i>
-                        <span>Confirmar Pedido</span>
-                    </button>
+                    <div class="card">
+                        <h2 class="card-title">Resumen del Pedido</h2>
+                        <div id="orderSummary">
+                            <p style="color: #666; font-style: italic;">Agregue productos para ver el resumen</p>
+                        </div>
+                    </div>
+                    
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Guardando pedido...</p>
+                    </div>
+                    
+                    <div style="display:flex; gap:10px;">
+                        <button id="confirmOrderBtn" class="btn btn-success" style="flex:1;">
+                            <i class="fas fa-check"></i>
+                            <span>Confirmar Pedido</span>
+                        </button>
+                        <button id="cancelEditBtn" class="btn btn-danger hidden" style="flex:0 0 auto;">Cancelar</button>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Pestaña Precios de Referencia -->
+        <!-- Pestaña Precios -->
         <div id="prices-tab" class="tab-content">
             <div class="card">
+                <h2 class="card-title">Nuestras Velas</h2>
+                
+                <div class="candle-gallery">
+                    <div class="candle-gallery-item">
+                        <img src="images/Blancas.jpeg" alt="Velas Blancas" class="candle-gallery-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDE1MCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNNzUgNjBINjVWNzBINzVWODBINjVWNzBINjVWNjBaTTg1IDYwSDk1VjcwSDg1VjgwSDc1VjcwSDg1VjYwWk03NSA5MEg4NVYxMDBINzVWOTBaTTY1IDkwSDc1VjEwMEg2NVY5MFoiIGZpbGw9IiNkZGRkZGQiLz4KPC9zdmc+'">
+                        <div class="candle-gallery-label">Blancas</div>
+                    </div>
+                    <div class="candle-gallery-item">
+                        <img src="images/Mirellas.jpeg" alt="Velas Mirellas" class="candle-gallery-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDE1MCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNNzUgNjBINjVWNzBINzVWODBINjVWNzBINjVWNjBaTTg1IDYwSDk1VjcwSDg1VjgwSDc1VjcwSDg1VjYwWk03NSA5MEg4NVYxMDBINzVWOTBaTTY1IDkwSDc1VjEwMEg2NVY5MFoiIGZpbGw9IiNkZGRkZGQiLz4KPC9zdmc+'">
+                        <div class="candle-gallery-label">Mirellas</div>
+                    </div>
+                    <div class="candle-gallery-item">
+                        <img src="images/Pesebre.jpeg" alt="Velas Pesebre" class="candle-gallery-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDE1MCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNNzUgNjBINjVWNzBINzVWODBINjVWNzBINjVWNjBaTTg1IDYwSDk1VjcwSDg1VjgwSDc1VjcwSDg1VjYwWk03NSA5MEg4NVYxMDBINzVWOTBaTTY1IDkwSDc1VjEwMEg2NVY5MFoiIGZpbGw9IiNkZGRkZGQiLz4KPC9zdmc+'">
+                        <div class="candle-gallery-label">Pesebre</div>
+                    </div>
+                    <div class="candle-gallery-item">
+                        <img src="images/Colores.jpeg" alt="Velas Colores" class="candle-gallery-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDE1MCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI2ZmZmZmZiIvPgo8cGF0aCBkPSJNNzUgNjBINjVWNzBINzVWODBINjVWNzBINjVWNjBaTTg1IDYwSDk1VjcwSDg1VjgwSDc1VjcwSDg1VjYwWk03NSA5MEg4NVYxMDBINzVWOTBaTTY1IDkwSDc1VjEwMEg2NVY5MFoiIGZpbGw9IiNkZGRkZGQiLz4KPC9zdmc+'">
+                        <div class="candle-gallery-label">Colores</div>
+                    </div>
+                </div>
+                
                 <h2 class="card-title">Precios de Referencia</h2>
                 
                 <table class="unified-price-table">
@@ -692,7 +996,6 @@
                         <tr>
                             <td>Mirellas</td>
                             <td class="price">$20.000</td>
-                        </tr>
                         <tr>
                             <td>Pesebre</td>
                             <td class="price">$18.000</td>
@@ -713,86 +1016,95 @@
                 </table>
             </div>
         </div>
-        
-        <!-- Pestaña Historial de Pedidos -->
-        <div id="summary-tab" class="tab-content">
+
+        <!-- Pestaña Historial -->
+        <div id="history-tab" class="tab-content">
             <div class="card">
                 <h2 class="card-title">Historial de Pedidos</h2>
-                
-                <div class="search-container">
-                    <input type="text" id="searchOrders" placeholder="Buscar pedidos por nombre de cliente..." class="form-group">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px;">
+                    <div style="color:#666; font-size:0.95rem;">Pedidos guardados localmente en su navegador.</div>
                 </div>
-                
-                <div id="orderHistory" class="order-history">
-                    <div class="orders-grid">
-                        <div class="no-orders">No hay pedidos registrados aún</div>
-                    </div>
+                <div class="filters-row" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+                    <input id="searchClientInput" type="text" placeholder="Buscar por cliente..." style="flex:3;padding:10px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;min-width:180px;" />
+                    <input id="searchDateInput" type="date" style="flex:1;max-width:180px;padding:8px;border-radius:6px;border:1px solid #ddd;background:#f9f9f9;" />
+                    <button id="clearFiltersBtn" class="btn btn-xs" style="padding:8px 10px;">Limpiar</button>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Modal para detalles del pedido -->
-        <div id="orderDetailsModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Detalles del Pedido</h3>
-                    <button class="close-modal">&times;</button>
-                </div>
-                <div id="modalBody">
-                    <!-- Contenido dinámico -->
+                <div style="overflow:auto;">
+                    <table class="unified-price-table" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Fecha Entrega</th>
+                                <th>Productos</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersHistoryBody">
+                            <tr><td colspan="5" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>© 2023 Gestor de Pedidos - Velas Navideñas | Todos los derechos reservados</p>
+            <p>© 2025 Gestor de Pedidos - Detalles Laurel Medellín - Velas Navideñas</p>
         </footer>
     </div>
 
     <script>
+        // Local storage key for orders history
+        const STORAGE_KEY = 'ordersHistory';
+
+        // Precios de referencia
+        const prices = {
+            Caja: {
+                Blancas: 20000,
+                Mirellas: 22000,
+                Pesebre: 20000,
+                Colores: 23000
+            },
+            Bolsa: {
+                Blancas: 18000,
+                Mirellas: 20000,
+                Pesebre: 18000,
+                Colores: 22000
+            },
+            woodBase: 12000
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Precios de referencia
-            const prices = {
-                caja: {
-                    blancas: 20000,
-                    mirellas: 22000,
-                    pesebre: 20000,
-                    colores: 23000
-                },
-                bolsa: {
-                    blancas: 18000,
-                    mirellas: 20000,
-                    pesebre: 18000,
-                    colores: 22000
-                },
-                woodBase: 12000
-            };
-            
-            // Mapeo de imágenes para cada tipo de vela
-            const candleImages = {
-                blancas: 'images/Blancas.jpeg',
-                mirellas: 'images/Mirellas.jpeg',
-                pesebre: 'images/Pesebre.jpeg',
-                colores: 'images/Colores.jpeg'
-            };
-            
             // Elementos del DOM
-            const packagingSelect = document.getElementById('packaging');
-            const candleTypeSelect = document.getElementById('candleType');
-            const woodBaseCheckbox = document.getElementById('woodBase');
-            const woodBaseMessageGroup = document.getElementById('woodBaseMessageGroup');
-            const woodBaseMessage = document.getElementById('woodBaseMessage');
             const customerNameInput = document.getElementById('customerName');
+            const customerPhoneInput = document.getElementById('customerPhone');
+            const deliveryDateInput = document.getElementById('deliveryDate');
             const candlePersonalization = document.getElementById('candlePersonalization');
             const confirmOrderBtn = document.getElementById('confirmOrderBtn');
-            const orderHistory = document.getElementById('orderHistory');
-            const searchOrders = document.getElementById('searchOrders');
-            const orderDetailsModal = document.getElementById('orderDetailsModal');
-            const modalBody = document.getElementById('modalBody');
-            const closeModal = document.querySelector('.close-modal');
+            const cancelEditBtn = document.getElementById('cancelEditBtn');
+            const loadingDiv = document.getElementById('loading');
+            const productsContainer = document.getElementById('productsContainer');
+            const searchClientInput = document.getElementById('searchClientInput');
+            const searchDateInput = document.getElementById('searchDateInput');
+            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+            const orderModalEl = document.getElementById('orderDetailsModal');
+            const addProductBtn = document.getElementById('addProductBtn');
+            const addWoodBasesCheckbox = document.getElementById('addWoodBases');
+            const woodBasesContainer = document.getElementById('woodBasesContainer');
+            const woodBasesQuantityInput = document.getElementById('woodBasesQuantity');
+            const woodBaseMessageInput = document.getElementById('woodBaseMessage');
+            const orderSummaryDiv = document.getElementById('orderSummary');
+            const lineCounter = document.getElementById('lineCounter');
             
-            // Variables globales
+            let productCount = 0;
             let editingOrderId = null;
+            
+            // Configurar fecha mínima como hoy
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const minDate = tomorrow.toISOString().split('T')[0];
+            deliveryDateInput.min = minDate;
             
             // Navegación entre pestañas
             const navTabs = document.querySelectorAll('.nav-tab');
@@ -809,360 +1121,637 @@
                     // Mostrar contenido correspondiente
                     tabContents.forEach(content => content.classList.remove('active'));
                     document.getElementById(`${tabId}-tab`).classList.add('active');
-                    
-                    // Si es la pestaña de resumen, cargar el historial
-                    if (tabId === 'summary') {
-                        loadOrderHistory();
-                    }
                 });
             });
             
-            // Mostrar/ocultar campo de mensaje para base de madera
-            woodBaseCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    woodBaseMessageGroup.classList.remove('hidden');
-                } else {
-                    woodBaseMessageGroup.classList.add('hidden');
-                }
+            // Agregar producto
+            addProductBtn.addEventListener('click', function() {
+                addProductItem();
             });
             
-            // Confirmar pedido
-            confirmOrderBtn.addEventListener('click', function() {
-                const packaging = packagingSelect.value;
-                const candleType = candleTypeSelect.value;
-                const hasWoodBase = woodBaseCheckbox.checked;
-                const woodMessage = woodBaseMessage.value;
+            // Agregar primer producto por defecto
+            addProductItem();
+
+            // Renderizar historial al cargar
+            renderOrderHistory();
+
+            // Manejar cierre al hacer click en el backdrop
+            if (orderModalEl) {
+                orderModalEl.addEventListener('click', function(e) {
+                    if (e.target === orderModalEl) {
+                        closeOrderModal();
+                    }
+                });
+            }
+
+            // Funciones de notificaciones (toasts) y confirmación
+            window.showToast = function(message, type = 'info', duration = 3500) {
+                const container = document.getElementById('toastContainer');
+                if (!container) return alert(message);
+                const toast = document.createElement('div');
+                toast.className = 'toast ' + (type || 'info');
+                toast.innerHTML = message;
+                container.appendChild(toast);
+                // show animation
+                setTimeout(() => toast.classList.add('show'), 10);
+                // hide after duration (if duration <=0, do not auto hide)
+                if (duration > 0) {
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                        setTimeout(() => { try{ container.removeChild(toast); } catch(e){} }, 220);
+                    }, duration);
+                }
+                // click to dismiss
+                toast.addEventListener('click', function() {
+                    toast.classList.remove('show');
+                    setTimeout(() => { try{ container.removeChild(toast); } catch(e){} }, 220);
+                });
+            };
+
+            window.showConfirm = function(message, onConfirm, onCancel) {
+                const modal = document.getElementById('confirmModal');
+                const msg = document.getElementById('confirmModalMessage');
+                const okBtn = document.getElementById('confirmOkBtn');
+                const cancelBtn = document.getElementById('confirmCancelBtn');
+                if (!modal || !msg || !okBtn || !cancelBtn) {
+                    // fallback to native confirm
+                    if (confirm(message)) { if (onConfirm) onConfirm(); } else { if (onCancel) onCancel(); }
+                    return;
+                }
+                msg.textContent = message;
+                modal.style.display = 'flex';
+                const cleanup = function() {
+                    modal.style.display = 'none';
+                    okBtn.onclick = null; cancelBtn.onclick = null;
+                };
+                okBtn.onclick = function() { cleanup(); if (onConfirm) onConfirm(); };
+                cancelBtn.onclick = function() { cleanup(); if (onCancel) onCancel(); };
+                // click on backdrop cancels
+                const backdropHandler = function(e) { if (e.target === modal) { cleanup(); if (onCancel) onCancel(); modal.removeEventListener('click', backdropHandler); } };
+                modal.addEventListener('click', backdropHandler);
+            };
+
+            // Buscar / filtrar
+            if (searchClientInput) searchClientInput.addEventListener('input', renderOrderHistory);
+            if (searchDateInput) searchDateInput.addEventListener('change', renderOrderHistory);
+            if (clearFiltersBtn) clearFiltersBtn.addEventListener('click', function() {
+                if (searchClientInput) searchClientInput.value = '';
+                if (searchDateInput) searchDateInput.value = '';
+                renderOrderHistory();
+            });
+            
+            // Confirmar pedido (crear o actualizar)
+            confirmOrderBtn.addEventListener('click', async function() {
                 const customerName = customerNameInput.value;
-                const personalizations = candlePersonalization.value.split('\n').filter(p => p.trim() !== '');
+                const customerPhone = customerPhoneInput.value;
+                const deliveryDate = deliveryDateInput.value;
+                const personalizations = candlePersonalization.value.trim();
                 
                 // Validaciones
-                if (!packaging || !candleType) {
-                    alert('Por favor, seleccione el tipo de empaque y tipo de vela.');
-                    return;
-                }
-                
                 if (!customerName) {
-                    alert('Por favor, ingrese su nombre.');
+                    showToast('Por favor, ingrese su nombre.', 'error');
                     return;
                 }
                 
-                // Calcular total
-                let total = prices[packaging][candleType];
-                let woodBaseCost = 0;
+                // El número de teléfono no es obligatorio
                 
-                if (hasWoodBase) {
-                    woodBaseCost = prices.woodBase;
-                    total += woodBaseCost;
+                if (!deliveryDate) {
+                    showToast('Por favor, seleccione una fecha de entrega.', 'error');
+                    return;
                 }
+                
+                const products = getProductsData();
+                if (products.length === 0) {
+                    showToast('Por favor, agregue al menos un producto al pedido.', 'error');
+                    return;
+                }
+                
+                // Validar líneas de personalización
+                const lines = personalizations.split('\n').filter(line => line.trim() !== '');
+                if (lines.length > 10) {
+                    showToast('Por favor, ingrese máximo 10 nombres o palabras para personalizar las velas.', 'error');
+                    return;
+                }
+                
+                // Procesar personalización - si está vacío, usar "Palabras predeterminadas"
+                const personalizacionFinal = personalizations ? lines.join(' | ') : 'Palabras predeterminadas';
                 
                 // Crear objeto de pedido
                 const order = {
-                    id: editingOrderId || Date.now(),
-                    customerName,
-                    packaging,
-                    candleType,
-                    hasWoodBase,
-                    woodMessage,
-                    personalizations,
-                    total,
-                    date: new Date().toLocaleString('es-ES')
+                    id: editingOrderId || generateId(),
+                    nombreCliente: customerName,
+                    telefonoCliente: customerPhone,
+                    productos: JSON.stringify(products),
+                    personalizacionVelas: personalizacionFinal,
+                    fechaRealizacion: new Date().toLocaleString('es-ES'),
+                    fechaEntrega: deliveryDate,
+                    total: calculateTotal()
                 };
                 
-                // Guardar en localStorage
-                saveOrder(order);
-                
-                alert(`¡Pedido ${editingOrderId ? 'actualizado' : 'confirmado'} con éxito!`);
-                
-                // Limpiar formulario
-                resetForm();
-                
-                // Si estábamos editando, volver al historial
-                if (editingOrderId) {
-                    navTabs.forEach(t => t.classList.remove('active'));
-                    document.querySelector('.nav-tab[data-tab="summary"]').classList.add('active');
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    document.getElementById('summary-tab').classList.add('active');
-                    
-                    // Cargar historial
-                    loadOrderHistory();
-                }
-            });
-            
-            // Buscar pedidos
-            searchOrders.addEventListener('input', function() {
-                loadOrderHistory(this.value);
-            });
-            
-            // Cerrar modal
-            closeModal.addEventListener('click', function() {
-                orderDetailsModal.style.display = 'none';
-            });
-            
-            // Cerrar modal al hacer clic fuera
-            window.addEventListener('click', function(event) {
-                if (event.target === orderDetailsModal) {
-                    orderDetailsModal.style.display = 'none';
-                }
-            });
-            
-            // Funciones auxiliares
-            function getCandleTypeName(type) {
-                const names = {
-                    blancas: 'Blancas',
-                    mirellas: 'Mirellas',
-                    pesebre: 'Pesebre',
-                    colores: 'Colores'
-                };
-                return names[type];
-            }
-            
-            function formatPrice(price) {
-                return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
-            
-            function saveOrder(order) {
-                let orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
-                
-                if (editingOrderId) {
-                    // Actualizar pedido existente
-                    const index = orders.findIndex(o => o.id === editingOrderId);
-                    if (index !== -1) {
-                        orders[index] = order;
-                    }
-                    editingOrderId = null;
+                // Agregar bases de madera si están seleccionadas
+                if (addWoodBasesCheckbox.checked) {
+                    order.basesMadera = 'Sí (' + woodBasesQuantityInput.value + ' unidades)';
+                    // Normalizar mensajes para la base: convertir líneas en ' | ' igual que las personalizaciones
+                    const rawMsg = (woodBaseMessageInput.value || '').trim();
+                    const msgLines = rawMsg.split('\n').map(l => l.trim()).filter(l => l !== '');
+                    order.mensajeBaseMadera = msgLines.length > 0 ? msgLines.join(' | ') : 'No aplica';
                 } else {
-                    // Agregar nuevo pedido
-                    orders.push(order);
+                    order.basesMadera = 'No';
+                    order.mensajeBaseMadera = 'No aplica';
                 }
                 
-                localStorage.setItem('candleOrders', JSON.stringify(orders));
-            }
+                // Mostrar loading
+                loadingDiv.style.display = 'block';
+                confirmOrderBtn.disabled = true;
+                
+                try {
+                    if (editingOrderId) {
+                        updateOrderLocal(order);
+                        alert('Pedido actualizado correctamente.');
+                    } else {
+                        saveOrderToLocal(order);
+                        const formattedDate = new Date(deliveryDate).toLocaleDateString('es-ES');
+                        showToast(`<strong>¡Pedido confirmado con éxito!</strong><br>Cliente: ${customerName}<br>Teléfono: ${customerPhone || 'No proporcionado'}<br>Fecha de entrega: ${formattedDate}<br>Total: $${calculateTotal().toLocaleString()}<br><small>Los datos han sido guardados en el Historial de Pedidos.</small>`, 'success', 6000);
+                    }
+
+                    // Limpiar formulario y resetear modo edición
+                    resetForm();
+
+                } catch (error) {
+                    console.error('Error al guardar el pedido localmente:', error);
+                    showToast('Error al guardar el pedido. Por favor, intente nuevamente.', 'error');
+                } finally {
+                    // Ocultar loading
+                    loadingDiv.style.display = 'none';
+                    confirmOrderBtn.disabled = false;
+                    cancelEditBtn.classList.add('hidden');
+                    editingOrderId = null;
+                    confirmOrderBtn.innerHTML = '<i class="fas fa-check"></i> <span>Confirmar Pedido</span>';
+                }
+            });
+
+            // Cancelar edición
+            cancelEditBtn.addEventListener('click', function() {
+                showConfirm('Cancelar edición del pedido?', function() {
+                    editingOrderId = null;
+                    resetForm();
+                    cancelEditBtn.classList.add('hidden');
+                    confirmOrderBtn.innerHTML = '<i class="fas fa-check"></i> <span>Confirmar Pedido</span>';
+                }, function() {
+                    // cancel, do nothing
+                });
+            });
             
-            function loadOrderHistory(searchTerm = '') {
-                const orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
-                const ordersGrid = orderHistory.querySelector('.orders-grid');
+            // Función para contar líneas
+            window.countLines = function(textarea) {
+                const lines = textarea.value.split('\n').filter(line => line.trim() !== '');
+                const lineCount = lines.length;
                 
-                // Filtrar pedidos si hay término de búsqueda
-                const filteredOrders = searchTerm 
-                    ? orders.filter(order => 
-                          order.customerName.toLowerCase().includes(searchTerm.toLowerCase()))
-                    : orders;
+                lineCounter.textContent = `Líneas: ${lineCount}/10`;
                 
-                if (filteredOrders.length === 0) {
-                    ordersGrid.innerHTML = '<div class="no-orders">No hay pedidos registrados</div>';
-                    return;
+                // Cambiar color según el número de líneas
+                lineCounter.className = 'line-counter';
+                if (lineCount >= 8 && lineCount <= 10) {
+                    lineCounter.classList.add('warning');
+                } else if (lineCount > 10) {
+                    lineCounter.classList.add('error');
                 }
-                
-                let historyHTML = '';
-                
-                // Ordenar pedidos por fecha (más reciente primero)
-                filteredOrders.sort((a, b) => b.id - a.id);
-                
-                filteredOrders.forEach(order => {
-                    const candleImage = candleImages[order.candleType] || 'images/default.jpeg';
-                    
-                    historyHTML += `
-                        <div class="order-card" data-order-id="${order.id}">
-                            <div class="order-header">
-                                <div class="order-customer">${order.customerName}</div>
-                                <div class="order-date">${order.date}</div>
-                            </div>
-                            <div class="order-content">
-                                <img src="${candleImage}" alt="${getCandleTypeName(order.candleType)}" class="candle-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iOCIgZmlsbD0iI2Y1ZjVmNSIvPgo8cGF0aCBkPSJNMzUgMzVIMzBWNDBIMzVWNDVINDBWNDBIMzVWMzVaTTQ1IDM1SDQwVjQwSDQ1VjQ1SDUwVjQwSDQ1VjM1Wk0zNSA1MEg0MFY1NUgzNVY1MFpNNDUgNTBINTAvNTVDNDUgNTBaTTMwIDUwSDM1VjU1SDMwVjUwWiIgZmlsbD0iI2RkZCIvPgo8L3N2Zz4K'">
-                                <div class="order-details">
-                                    <div class="order-detail-item">
-                                        <span>Empaque:</span>
-                                        <span>${order.packaging === 'caja' ? 'Caja' : 'Bolsa'}</span>
-                                    </div>
-                                    <div class="order-detail-item">
-                                        <span>Tipo de vela:</span>
-                                        <span>${getCandleTypeName(order.candleType)}</span>
-                                    </div>
-                                    <div class="order-detail-item">
-                                        <span>Base en madera:</span>
-                                        <span>${order.hasWoodBase ? 'Sí' : 'No'}</span>
-                                    </div>
-                                    <div class="order-detail-item">
-                                        <span>Total:</span>
-                                        <span class="price">$${formatPrice(order.total)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="order-actions">
-                                <button class="btn btn-sm btn-info view-details">
-                                    <i class="fas fa-eye"></i>
-                                    <span class="btn-text">Ver Detalles</span>
-                                </button>
-                                <button class="btn btn-sm btn-warning edit-order">
-                                    <i class="fas fa-edit"></i>
-                                    <span class="btn-text">Editar</span>
-                                </button>
-                                <button class="btn btn-sm btn-danger delete-order">
-                                    <i class="fas fa-trash"></i>
-                                    <span class="btn-text">Eliminar</span>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                ordersGrid.innerHTML = historyHTML;
-                
-                // Agregar event listeners a los botones
-                document.querySelectorAll('.view-details').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const orderId = this.closest('.order-card').getAttribute('data-order-id');
-                        showOrderDetails(orderId);
-                    });
-                });
-                
-                document.querySelectorAll('.edit-order').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const orderId = parseInt(this.closest('.order-card').getAttribute('data-order-id'));
-                        editOrder(orderId);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-order').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const orderId = parseInt(this.closest('.order-card').getAttribute('data-order-id'));
-                        deleteOrder(orderId);
-                    });
-                });
-            }
+            };
             
-            function showOrderDetails(orderId) {
-                const orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
-                const order = orders.find(o => o.id === parseInt(orderId));
-                
-                if (!order) return;
-                
-                const candleImage = candleImages[order.candleType] || 'images/default.jpeg';
-                
-                let detailsHTML = `
-                    <img src="${candleImage}" alt="${getCandleTypeName(order.candleType)}" class="modal-candle-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiByeD0iOCIgZmlsbD0iI2Y1ZjVmNSIvPgo8cGF0aCBkPSJNNTAgNTBINDVWNTVINTBWNjBINTVWNTVINTBWNTVaTTY1IDUwSDYwVjU1SDY1VjYwSDcwVjU1SDY1VjUwWk01MCA3NUg1NVY4MEg1MFY3NVpNNjUgNzVINzBWODBINjVWNzVaTTQ1IDc1SDUwVjgwSDQ1Vjc1WiIgZmlsbD0iI2RkZCIvPgo8L3N2Zz4K'">
-                    <div class="order-details">
-                        <div class="order-detail-item">
-                            <span>Cliente:</span>
-                            <span>${order.customerName}</span>
+            // Función para agregar producto
+            function addProductItem() {
+                productCount++;
+                const productId = Date.now();
+                const productHtml = `
+                    <div class="product-item" data-id="${productId}">
+                        <div class="product-header">
+                            <div class="product-number">Producto ${productCount}</div>
+                            <button class="remove-product" onclick="removeProduct(${productId})" title="Eliminar producto">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                        <div class="order-detail-item">
-                            <span>Fecha:</span>
-                            <span>${order.date}</span>
-                        </div>
-                        <div class="order-detail-item">
-                            <span>Empaque:</span>
-                            <span>${order.packaging === 'caja' ? 'Caja' : 'Bolsa'}</span>
-                        </div>
-                        <div class="order-detail-item">
-                            <span>Tipo de vela:</span>
-                            <span>${getCandleTypeName(order.candleType)}</span>
-                        </div>
-                        <div class="order-detail-item">
-                            <span>Base en madera:</span>
-                            <span>${order.hasWoodBase ? 'Sí' : 'No'}</span>
-                        </div>
-                `;
-                
-                if (order.hasWoodBase && order.woodMessage) {
-                    detailsHTML += `
-                        <div class="order-detail-item">
-                            <span>Mensaje base:</span>
-                        </div>
-                        <div class="wood-message">
-                            "${order.woodMessage}"
-                        </div>
-                    `;
-                }
-                
-                if (order.personalizations.length > 0) {
-                    detailsHTML += `
-                        <div class="order-detail-item">
-                            <span>Personalizaciones:</span>
-                        </div>
-                        <div class="personalization-list">
-                    `;
-                    
-                    order.personalizations.forEach(p => {
-                        detailsHTML += `
-                            <div class="personalization-item">${p}</div>
-                        `;
-                    });
-                    
-                    detailsHTML += `</div>`;
-                }
-                
-                detailsHTML += `
-                        <div class="order-detail-item">
-                            <span>Total:</span>
-                            <span class="price">$${formatPrice(order.total)}</span>
+                        <div class="product-fields">
+                            <div class="form-group">
+                                <label>Tipo de Empaque:</label>
+                                <select class="packaging-select" onchange="updateOrderSummary()">
+                                    <option value="">Seleccione empaque</option>
+                                    <option value="Caja">Caja</option>
+                                    <option value="Bolsa">Bolsa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Vela:</label>
+                                <select class="candle-type-select" onchange="updateOrderSummary()">
+                                    <option value="">Seleccione vela</option>
+                                    <option value="Blancas">Blancas</option>
+                                    <option value="Mirellas">Mirellas</option>
+                                    <option value="Pesebre">Pesebre</option>
+                                    <option value="Colores">Colores</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Cantidad:</label>
+                                <input type="number" class="quantity-input" min="1" value="1" onchange="updateOrderSummary()">
+                            </div>
                         </div>
                     </div>
                 `;
-                
-                modalBody.innerHTML = detailsHTML;
-                orderDetailsModal.style.display = 'flex';
+                productsContainer.insertAdjacentHTML('beforeend', productHtml);
+                updateOrderSummary();
             }
             
-            function editOrder(orderId) {
-                const orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
-                const order = orders.find(o => o.id === orderId);
+            // Función para obtener datos de productos
+            function getProductsData() {
+                const products = [];
+                const productItems = productsContainer.querySelectorAll('.product-item');
                 
-                if (!order) return;
+                productItems.forEach(item => {
+                    const packaging = item.querySelector('.packaging-select').value;
+                    const candleType = item.querySelector('.candle-type-select').value;
+                    const quantity = parseInt(item.querySelector('.quantity-input').value);
+                    
+                    if (packaging && candleType && quantity > 0) {
+                        products.push({
+                            packaging: packaging,
+                            candleType: candleType,
+                            quantity: quantity,
+                            unitPrice: prices[packaging][candleType],
+                            subtotal: prices[packaging][candleType] * quantity
+                        });
+                    }
+                });
                 
-                // Llenar el formulario con los datos del pedido
-                packagingSelect.value = order.packaging;
-                candleTypeSelect.value = order.candleType;
-                woodBaseCheckbox.checked = order.hasWoodBase;
+                return products;
+            }
+            
+            // Función para calcular total
+            function calculateTotal() {
+                let total = 0;
                 
-                if (order.hasWoodBase) {
-                    woodBaseMessageGroup.classList.remove('hidden');
-                    woodBaseMessage.value = order.woodMessage || '';
-                } else {
-                    woodBaseMessageGroup.classList.add('hidden');
+                // Sumar productos
+                const products = getProductsData();
+                products.forEach(product => {
+                    total += product.subtotal;
+                });
+                
+                // Sumar bases de madera si están seleccionadas
+                if (addWoodBasesCheckbox.checked) {
+                    const woodBasesQuantity = parseInt(woodBasesQuantityInput.value) || 0;
+                    total += woodBasesQuantity * prices.woodBase;
                 }
                 
-                customerNameInput.value = order.customerName;
-                candlePersonalization.value = order.personalizations.join('\n');
+                return total;
+            }
+            
+            // Función para actualizar resumen
+            function updateOrderSummary() {
+                const products = getProductsData();
+                let summaryHtml = '';
                 
-                // Cambiar texto del botón
-                confirmOrderBtn.innerHTML = '<i class="fas fa-sync-alt"></i><span>Actualizar Pedido</span>';
+                if (products.length === 0) {
+                    summaryHtml = '<p style="color: #666; font-style: italic;">Agregue productos para ver el resumen</p>';
+                } else {
+                    summaryHtml = '<div class="summary-items">';
+                    
+                    // Productos
+                    products.forEach((product, index) => {
+                        const displayPackaging = product.quantity > 1 ? 
+                            `${product.packaging} x${product.quantity}` : 
+                            product.packaging;
+                            
+                        summaryHtml += `
+                            <div class="summary-item">
+                                <span>${displayPackaging.toLowerCase()} de ${product.candleType.toLowerCase()}</span>
+                                <span class="price">$${product.subtotal.toLocaleString()}</span>
+                            </div>
+                        `;
+                    });
+                    
+                    // Bases de madera
+                    if (addWoodBasesCheckbox.checked) {
+                        const woodBasesQuantity = parseInt(woodBasesQuantityInput.value) || 0;
+                        const woodBasesSubtotal = woodBasesQuantity * prices.woodBase;
+                        summaryHtml += `
+                            <div class="summary-item">
+                                <span>${woodBasesQuantity} base(s) de madera</span>
+                                <span class="price">$${woodBasesSubtotal.toLocaleString()}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    // Total
+                    const total = calculateTotal();
+                    summaryHtml += `
+                        <div class="summary-total">
+                            <span>TOTAL:</span>
+                            <span class="price">$${total.toLocaleString()}</span>
+                        </div>
+                    `;
+                    
+                    summaryHtml += '</div>';
+                }
                 
-                // Guardar ID para actualización
-                editingOrderId = orderId;
-                
-                // Ir a la pestaña de pedidos
+                orderSummaryDiv.innerHTML = summaryHtml;
+            }
+            
+            // Guardar pedido en localStorage
+            function saveOrderToLocal(orderData) {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                // Si ya existe con el mismo id, reemplazarlo
+                const idx = existing.findIndex(e => e.id && orderData.id && e.id === orderData.id);
+                if (idx > -1) {
+                    existing[idx] = orderData;
+                } else {
+                    // Añadir al inicio para que el más reciente aparezca primero
+                    existing.unshift(orderData);
+                }
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+                renderOrderHistory();
+            }
+
+            // Actualizar pedido existente en localStorage
+            function updateOrderLocal(orderData) {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                const idx = existing.findIndex(e => e.id && orderData.id && e.id === orderData.id);
+                if (idx > -1) {
+                    existing[idx] = orderData;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+                    renderOrderHistory();
+                } else {
+                    // Si no existe, añadirlo
+                    saveOrderToLocal(orderData);
+                }
+            }
+
+            // Generar id simple
+            function generateId() {
+                return Date.now().toString(36) + '-' + Math.random().toString(36).substr(2,6);
+            }
+
+            // Renderizar historial de pedidos
+            function renderOrderHistory() {
+                const tbody = document.getElementById('ordersHistoryBody');
+                if (!tbody) return;
+                let orders = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') || [];
+                // Normalizar pedidos antiguos: si falta 'id', agregar uno.
+                let needsSave = false;
+                orders = orders.map(o => {
+                    if (!o.id) {
+                        o.id = generateId();
+                        needsSave = true;
+                    }
+                    return o;
+                });
+                if (needsSave) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+                }
+                // Obtener filtros
+                const nameFilter = (document.getElementById('searchClientInput') && document.getElementById('searchClientInput').value || '').trim().toLowerCase();
+                const dateFilter = (document.getElementById('searchDateInput') && document.getElementById('searchDateInput').value) || '';
+
+                if (!orders || orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="color:#666; text-align:center;">No hay pedidos guardados.</td></tr>';
+                    return;
+                }
+
+                // Aplicar filtros
+                const filtered = orders.filter(o => {
+                    if (nameFilter && !(o.nombreCliente||'').toLowerCase().includes(nameFilter)) return false;
+                    if (dateFilter && o.fechaEntrega !== dateFilter) return false;
+                    return true;
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="color:#666; text-align:center;">No hay resultados para los filtros seleccionados.</td></tr>';
+                    return;
+                }
+
+                let html = '';
+                filtered.forEach(o => {
+                    let productosDisplay = '';
+                    try {
+                        const prods = JSON.parse(o.productos);
+                        productosDisplay = prods.map(p => `${p.packaging} ${p.candleType} x${p.quantity}`).join(' — ');
+                    } catch (e) {
+                        productosDisplay = o.productos;
+                    }
+
+                    const totalNum = parseInt(o.total) || 0;
+
+                    html += `
+                        <tr>
+                            <td>${o.nombreCliente}</td>
+                            <td>${o.fechaEntrega}</td>
+                            <td>${productosDisplay}</td>
+                            <td class="price">$${totalNum.toLocaleString()}</td>
+                            <td>
+                                <button class="btn btn-info btn-xs" onclick="viewOrderDetails('${o.id}')">Ver</button>
+                                <button class="btn btn-warning btn-xs" onclick="editOrder('${o.id}')">Editar</button>
+                                <button class="btn btn-danger btn-xs" onclick="deleteOrder('${o.id}')">Borrar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tbody.innerHTML = html;
+            }
+
+            // Borrar historial completo (expuesto globalmente)
+            window.clearOrderHistory = function() {
+                showConfirm('¿Borrar todo el historial de pedidos? Esta acción no se puede deshacer.', function() {
+                    localStorage.removeItem(STORAGE_KEY);
+                    renderOrderHistory();
+                }, function() {
+                    // canceled
+                });
+            };
+
+            // Borrar un pedido por id
+            window.deleteOrder = function(id) {
+                showConfirm('¿Borrar este pedido?', function() {
+                    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                    const filtered = existing.filter(o => o.id !== id);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+                    renderOrderHistory();
+                }, function() {
+                    // canceled
+                });
+            };
+
+            // Ver detalles de un pedido
+            window.viewOrderDetails = function(id) {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                const o = existing.find(x => x.id === id);
+                if (!o) { showToast('Pedido no encontrado', 'error'); return; }
+                const container = document.getElementById('orderDetailsContent');
+                let html = '';
+                html += `<p><strong>Cliente:</strong> ${o.nombreCliente}</p>`;
+                html += `<p><strong>Teléfono:</strong> ${o.telefonoCliente || 'No proporcionado'}</p>`;
+                html += `<p><strong>Fecha de entrega:</strong> ${o.fechaEntrega}</p>`;
+                html += `<hr>`;
+                html += `<h4>Productos</h4>`;
+                try {
+                    const prods = JSON.parse(o.productos);
+                    html += `<ul style="padding-left:18px;">`;
+                    prods.forEach(p => {
+                        html += `<li><strong>Producto:</strong> ${p.packaging} ${p.candleType} — <strong>Cantidad:</strong> ${p.quantity}</li>`;
+                    });
+                    html += `</ul>`;
+                } catch (e) {
+                    html += `<p>${o.productos}</p>`;
+                }
+                html += `<p><strong>Bases de madera:</strong> ${o.basesMadera || 'No'}</p>`;
+                html += `<p><strong>Mensaje para base:</strong> ${o.mensajeBaseMadera || 'No aplica'}</p>`;
+                html += `<p><strong>Nombres/Palabras para velas:</strong> ${o.personalizacionVelas || 'Palabras predeterminadas'}</p>`;
+                html += `<hr>`;
+                html += `<p style="font-weight:700;">Total: <span class="price">$${(parseInt(o.total)||0).toLocaleString()}</span></p>`;
+                container.innerHTML = html;
+                if (orderModalEl) {
+                    orderModalEl.style.display = 'flex';
+                } else {
+                    document.getElementById('orderDetailsModal').style.display = 'flex';
+                }
+            };
+
+            window.closeOrderModal = function() {
+                const modal = document.getElementById('orderDetailsModal');
+                const content = document.getElementById('orderDetailsContent');
+                if (modal) modal.style.display = 'none';
+                if (content) content.innerHTML = '';
+            };
+
+            // Editar pedido: cargar datos al formulario
+            window.editOrder = function(id) {
+                const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                const o = existing.find(x => x.id === id);
+                if (!o) { showToast('Pedido no encontrado', 'error'); return; }
+                // Cargar datos en formulario
+                customerNameInput.value = o.nombreCliente || '';
+                customerPhoneInput.value = o.telefonoCliente || '';
+                deliveryDateInput.value = o.fechaEntrega || '';
+                candlePersonalization.value = o.personalizacionVelas && o.personalizacionVelas !== 'Palabras predeterminadas' ? o.personalizacionVelas.split(' | ').join('\n') : '';
+                // Productos
+                productsContainer.innerHTML = '';
+                productCount = 0;
+                try {
+                    const prods = JSON.parse(o.productos);
+                    prods.forEach(p => {
+                        productCount++;
+                        const productId = Date.now() + Math.floor(Math.random()*1000);
+                        const productHtml = `
+                            <div class="product-item" data-id="${productId}">
+                                <div class="product-header">
+                                    <div class="product-number">Producto ${productCount}</div>
+                                    <button class="remove-product" onclick="removeProduct(${productId})" title="Eliminar producto">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="product-fields">
+                                    <div class="form-group">
+                                        <label>Tipo de Empaque:</label>
+                                        <select class="packaging-select" onchange="updateOrderSummary()">
+                                            <option value="">Seleccione empaque</option>
+                                            <option value="Caja" ${p.packaging==='Caja'?'selected':''}>Caja</option>
+                                            <option value="Bolsa" ${p.packaging==='Bolsa'?'selected':''}>Bolsa</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tipo de Vela:</label>
+                                        <select class="candle-type-select" onchange="updateOrderSummary()">
+                                            <option value="">Seleccione vela</option>
+                                            <option value="Blancas" ${p.candleType==='Blancas'?'selected':''}>Blancas</option>
+                                            <option value="Mirellas" ${p.candleType==='Mirellas'?'selected':''}>Mirellas</option>
+                                            <option value="Pesebre" ${p.candleType==='Pesebre'?'selected':''}>Pesebre</option>
+                                            <option value="Colores" ${p.candleType==='Colores'?'selected':''}>Colores</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Cantidad:</label>
+                                        <input type="number" class="quantity-input" min="1" value="${p.quantity}" onchange="updateOrderSummary()">
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        productsContainer.insertAdjacentHTML('beforeend', productHtml);
+                    });
+                } catch (e) {
+                    // no-op
+                }
+                // Bases
+                if ((o.basesMadera||'').toLowerCase().includes('sí') || (o.basesMadera||'').toLowerCase().includes('si')) {
+                    addWoodBasesCheckbox.checked = true;
+                    woodBasesContainer.classList.remove('hidden');
+                    // intentar extraer cantidad
+                    const m = (o.basesMadera || '').match(/(\d+)/);
+                    woodBasesQuantityInput.value = m ? m[0] : '1';
+                    // Convertir el formato almacenado (separador ' | ') a líneas en el textarea
+                    if (o.mensajeBaseMadera && o.mensajeBaseMadera !== 'No aplica') {
+                        woodBaseMessageInput.value = o.mensajeBaseMadera.split(' | ').join('\n');
+                    } else {
+                        woodBaseMessageInput.value = '';
+                    }
+                } else {
+                    addWoodBasesCheckbox.checked = false;
+                    woodBasesContainer.classList.add('hidden');
+                }
+
+                updateOrderSummary();
+                editingOrderId = id;
+                cancelEditBtn.classList.remove('hidden');
+                confirmOrderBtn.innerHTML = '<i class="fas fa-save"></i> <span>Guardar cambios</span>';
+                // Ir a pestaña de formulario
                 navTabs.forEach(t => t.classList.remove('active'));
                 document.querySelector('.nav-tab[data-tab="order"]').classList.add('active');
                 tabContents.forEach(content => content.classList.remove('active'));
                 document.getElementById('order-tab').classList.add('active');
-            }
+            };
             
-            function deleteOrder(orderId) {
-                if (confirm('¿Está seguro de que desea eliminar este pedido?')) {
-                    let orders = JSON.parse(localStorage.getItem('candleOrders')) || [];
-                    orders = orders.filter(o => o.id !== orderId);
-                    localStorage.setItem('candleOrders', JSON.stringify(orders));
-                    loadOrderHistory();
-                }
-            }
-            
+            // Funciones auxiliares
             function resetForm() {
-                packagingSelect.value = '';
-                candleTypeSelect.value = '';
-                woodBaseCheckbox.checked = false;
-                woodBaseMessageGroup.classList.add('hidden');
-                woodBaseMessage.value = '';
                 customerNameInput.value = '';
+                customerPhoneInput.value = '';
+                deliveryDateInput.value = '';
                 candlePersonalization.value = '';
-                confirmOrderBtn.innerHTML = '<i class="fas fa-check"></i><span>Confirmar Pedido</span>';
-                editingOrderId = null;
+                productsContainer.innerHTML = '';
+                productCount = 0;
+                addWoodBasesCheckbox.checked = false;
+                woodBasesContainer.classList.add('hidden');
+                woodBasesQuantityInput.value = '1';
+                woodBaseMessageInput.value = '';
+                lineCounter.textContent = 'Líneas: 0/10';
+                lineCounter.className = 'line-counter';
+                addProductItem();
+                updateOrderSummary();
             }
             
-            // Cargar historial al iniciar si estamos en la pestaña de resumen
-            if (document.querySelector('.nav-tab[data-tab="summary"]').classList.contains('active')) {
-                loadOrderHistory();
-            }
+            // Hacer funciones disponibles globalmente
+            window.removeProduct = function(productId) {
+                const productElement = document.querySelector(`.product-item[data-id="${productId}"]`);
+                if (productElement) {
+                    productElement.remove();
+                    productCount--;
+                    // Renumerar productos restantes
+                    const remainingProducts = productsContainer.querySelectorAll('.product-item');
+                    remainingProducts.forEach((product, index) => {
+                        const numberElement = product.querySelector('.product-number');
+                        if (numberElement) {
+                            numberElement.textContent = `Producto ${index + 1}`;
+                        }
+                    });
+                    updateOrderSummary();
+                }
+            };
+            
+            window.toggleWoodBases = function() {
+                if (addWoodBasesCheckbox.checked) {
+                    woodBasesContainer.classList.remove('hidden');
+                } else {
+                    woodBasesContainer.classList.add('hidden');
+                }
+                updateOrderSummary();
+            };
+            
+            window.updateOrderSummary = updateOrderSummary;
         });
     </script>
 </body>
